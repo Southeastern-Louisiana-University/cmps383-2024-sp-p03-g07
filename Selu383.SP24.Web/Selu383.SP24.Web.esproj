@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/0.5.128-alpha">
+  <!-- These options are all defined in: https://learn.microsoft.com/en-us/visualstudio/javascript/javascript-project-system-msbuild-reference?view=vs-2022 -->
+  <PropertyGroup>
+
+    <!-- Specifies the behavior for the 'dotnet run' command -->
+    <StartupCommand>npm run dev</StartupCommand>
+
+    <!-- Specifies the behavior for the build target. In our case, this is only for 'dotnet publish' -->
+    <BuildCommand>npm run build</BuildCommand>
+
+    <!-- Specifies whether to run or not `run npm install` on Build and Restore commands. -->
+    <ShouldRunNpmInstall>true</ShouldRunNpmInstall>
+
+    <!-- Specifies whether or not to run `npm run build` on Build commands -->
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+
+    <!-- Folder where production build objects will be placed -->
+    <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
+
+  </PropertyGroup>
+</Project>

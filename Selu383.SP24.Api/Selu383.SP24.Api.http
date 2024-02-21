@@ -1,0 +1,8 @@
+### this is a nice tool to help demonstrate your api calls: https://learn.microsoft.com/en-us/aspnet/core/test/http-files?view=aspnetcore-8.0
+
+@Selu383.SP24.Api_HostAddress = https://localhost:7116
+
+GET {{Selu383.SP24.Api_HostAddress}}/api/hotels/
+Accept: application/json
+
+###
