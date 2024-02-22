@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Selu383-SP24-Mobile-p03-g##",
-    "slug": "Selu383-SP24-Mobile-p03-g##",
+    "name": "Selu-383-SP24-Mobile-g07",
+    "slug": "Selu-383-SP24-Mobile-g07",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,10 +22,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.selu383.sp24.p03.g##"
+      "package": "com.selu383.sp24.p03.g07"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ad6bd4e0-31ba-4621-b19f-3c6becb0f960"
+      }
+    },
+    "owner": "lillaundry"
   }
 }
