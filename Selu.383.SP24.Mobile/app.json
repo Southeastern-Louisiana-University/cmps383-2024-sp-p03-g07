@@ -32,6 +32,9 @@
         "projectId": "ad6bd4e0-31ba-4621-b19f-3c6becb0f960"
       }
     },
-    "owner": "lillaundry"
-  }
+    "owner":"lillaundry"
+    
+  },
+  "plugins":["expo-router"],
+    "scheme": "your-app-scheme"
 }
