@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import Home from "./routes/home";
+import Home from "./routes/home/homepage";
 import Help from "./routes/help";
-import MainLayout from "./routes/_layout";
-import HotelDetails from "./routes/home/hotel-details";
+import MainLayout from "./routes/home/navbar";
+import HotelDetails from "./routes/home/hotel-details/hoteldetails";
+import FindHotel from "./routes/home/FindHotel";
+import { CachePolicies, Provider } from "use-http";
 
 const router = createBrowserRouter([
   {
@@ -15,8 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        children: [{ path: "hotel-details/:foo", element: <HotelDetails /> }],
+        children: [],
       },
+      { path: "/find-hotel", element: <FindHotel /> },
+      { path: "/hotel-details/:foo", element: <HotelDetails /> },
       {
         path: "/help",
         element: <Help />,
@@ -26,7 +29,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <Provider options={{ cache: CachePolicies.NO_CACHE }}>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </Provider>
 );
