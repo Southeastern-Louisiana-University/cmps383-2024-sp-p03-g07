@@ -1,0 +1,8 @@
+.home-container {
+    background-image: url("./src/assets/homebg.jpg");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh; /* Ensure the container takes up at least the height of the viewport */
+    padding: 20px; /* Add padding if necessary */
+  }
+  

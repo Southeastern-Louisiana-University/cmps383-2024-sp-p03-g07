@@ -2,6 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { HotelDto } from "../../features/hotels/HotelDto";
 import { useFetch } from "use-http";
 
+
 export default function FindHotel() {
     const [params] = useSearchParams();
     const searchTerm = params.get("searchTerm");
