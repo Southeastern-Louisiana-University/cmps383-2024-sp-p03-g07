@@ -97,7 +97,7 @@ public static class SeedHelper
         dataContext.Set<Hotel>()
             .Add(new Hotel
             {
-                Name = "TEnstay 3",
+                Name = "Enstay 3",
                 Address = "200 Convention St, Baton Rouge, LA 70801"
             });
 
