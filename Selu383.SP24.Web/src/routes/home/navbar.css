@@ -19,3 +19,9 @@
     margin-left: auto; /* Aligns the nav links to the right */
   }
 
+  .custom-link {
+    color: #ff6600; /* Custom text color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Apply bold font weight */
+    /* Add more styling as needed */
+  }

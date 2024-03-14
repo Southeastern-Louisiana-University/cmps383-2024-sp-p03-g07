@@ -7,6 +7,9 @@ import MainLayout from "./routes/home/navbar";
 import HotelDetails from "./routes/home/hotel-details/hoteldetails";
 import FindHotel from "./routes/home/FindHotel";
 import { CachePolicies, Provider } from "use-http";
+import SignPage from "./routes/signup/signpage";
+
+
 
 const router = createBrowserRouter([
   {
@@ -20,13 +23,17 @@ const router = createBrowserRouter([
       },
       { path: "/find-hotel", element: <FindHotel /> },
       { path: "/hotel-details/:foo", element: <HotelDetails /> },
-      {
-        path: "/help",
-        element: <Help />,
-      },
+      { path: '/signup', element: <SignPage /> }, // Add route for the signup page
+      { path: "/help", element: <Help /> },
     ],
   },
 ]);
+
+const App = () => {
+  return <>{router}</>;
+};
+
+export default App;
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider options={{ cache: CachePolicies.NO_CACHE }}>
