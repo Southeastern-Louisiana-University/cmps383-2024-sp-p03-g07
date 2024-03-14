@@ -1,0 +1,27 @@
+/* _layout.css */
+
+/* Styles to make the navbar fixed at the top and centered */
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensures the navbar appears above other content */
+    background-color:#fcd34d;
+  }
+  
+  .navbar-brand {
+    margin-right: auto; /* Aligns the brand/logo to the left */
+    margin-left: auto; /* Aligns the brand/logo to the right */
+  }
+  
+  .navbar-nav {
+    margin-left: auto; /* Aligns the nav links to the right */
+  }
+
+  .custom-link {
+    color: #ff6600; /* Custom text color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Apply bold font weight */
+    /* Add more styling as needed */
+  }
