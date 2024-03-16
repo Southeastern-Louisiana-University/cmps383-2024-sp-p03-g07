@@ -1,12 +1,12 @@
-/* _layout.css */
 
 /* Styles to make the navbar fixed at the top and centered */
 .navbar {
     position: fixed;
     width: 100%;
+    height: 150%;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensures the navbar appears above other content */
+    z-index: 500; /* Ensures the navbar appears above other content */
     background-color:#fcd34d;
   }
   
