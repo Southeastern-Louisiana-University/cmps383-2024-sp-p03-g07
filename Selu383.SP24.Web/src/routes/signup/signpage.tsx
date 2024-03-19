@@ -30,20 +30,20 @@ const SignUp: React.FC = () => {
       <h2>Sign Up</h2>
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Username:</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <label><strong>Username:</strong></label>
+          <input type="text"  placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
         </div>
         <div className="form-group">
-          <label>Email Address:</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <label><strong>Email Address:</strong></label>
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className="form-group">
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <label><strong>Password:</strong></label>
+          <input type="password" placeholder="Password"value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div className="form-group">
-          <label>Confirm Password:</label>
-          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+          <label><strong>Confirm Password:</strong></label>
+          <input type="password" placeholder="Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
         </div>
         <div className="form-group">
           <input type="checkbox" checked={termsAgreed} onChange={(e) => setTermsAgreed(e.target.checked)} />
