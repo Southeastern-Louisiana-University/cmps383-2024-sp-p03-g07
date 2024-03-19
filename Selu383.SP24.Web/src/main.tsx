@@ -8,7 +8,7 @@ import HotelDetails from "./routes/home/hotel-details/hoteldetails";
 import FindHotel from "./routes/home/FindHotel";
 import { CachePolicies, Provider } from "use-http";
 import SignPage from "./routes/signup/signpage";
-
+import LoginPage from "./routes/login/loginpage";
 
 
 const router = createBrowserRouter([
@@ -23,7 +23,8 @@ const router = createBrowserRouter([
       },
       { path: "/find-hotel", element: <FindHotel /> },
       { path: "/hotel-details/:foo", element: <HotelDetails /> },
-      { path: '/signup', element: <SignPage /> }, // Add route for the signup page
+      { path: '/signup', element: <SignPage /> },
+      { path: '/login', element: <LoginPage /> },
       { path: "/help", element: <Help /> },
     ],
   },
