@@ -2,6 +2,7 @@
   "expo": {
     "name": "Selu-383-SP24-Mobile-g07",
     "slug": "Selu-383-SP24-Mobile-g07",
+    "scheme": "Selu-383-SP24-Mobile-g07",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,14 +28,13 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "ad6bd4e0-31ba-4621-b19f-3c6becb0f960"
-      }
-    },
-    "owner":"lillaundry"
-    
+ 
+    "owner": "kade.snyder",
+    "plugins": [
+      "expo-router"
+    ]
   },
-  "plugins":["expo-router"],
-    "scheme": "your-app-scheme"
+  "plugins": [
+    "expo-router"
+  ]
 }

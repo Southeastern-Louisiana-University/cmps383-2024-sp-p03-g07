@@ -1,8 +1,24 @@
 .home-container {
-    background-image: url("./src/assets/homebg.jpg");
-    background-size: cover;
-    background-position: center;
-    min-height: 100vh; /* Ensure the container takes up at least the height of the viewport */
-    padding: 20px; /* Add padding if necessary */
-  }
-  
+  display: flex;
+  flex-direction: column; /* Align children vertically */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h1 {
+  position: "absolute", top "50px" ;
+}
+
+.hotel-form {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px; /* Adjust width as needed */
+  width: 90%; /* To keep the form responsive */
+  text-align: center; /* Center align form contents */
+  font-family: 'Roboto', sans-serif; /* Use a different font */
+  margin-top: -360px; /* Add margin from the top */
+}
+
+
