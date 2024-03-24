@@ -1,13 +1,14 @@
-import React from "react";
+//import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/home/homepage";
-import Help from "./routes/help";
+import Help from "./routes/help/help";
 import MainLayout from "./routes/home/navbar";
 import HotelDetails from "./routes/home/hotel-details/hoteldetails";
 import FindHotel from "./routes/home/FindHotel";
 import { CachePolicies, Provider } from "use-http";
 import SignPage from "./routes/signup/signpage";
+import About from "./routes/about/about";
 
 
 
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: "/hotel-details/:foo", element: <HotelDetails /> },
       { path: '/signup', element: <SignPage /> }, // Add route for the signup page
       { path: "/help", element: <Help /> },
+      { path: "/about", element: <About />}
     ],
   },
 ]);

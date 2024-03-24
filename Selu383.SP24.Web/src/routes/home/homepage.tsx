@@ -6,7 +6,7 @@ import "./homepage.css";
 import homebg from "../../assets/homebg.jpg"; // Import the image
 
 export default function Home() {
-  const [count, setCount] = useState(0);
+  const [count] = useState(0);
   const [hotels, setHotels] = useState<HotelDto[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
