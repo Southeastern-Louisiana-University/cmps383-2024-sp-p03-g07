@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/home/homepage";
@@ -9,7 +9,7 @@ import FindHotel from "./routes/home/FindHotel";
 import { CachePolicies, Provider } from "use-http";
 import SignPage from "./routes/signup/signpage";
 import LoginPage from "./routes/login/loginpage";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
   {
