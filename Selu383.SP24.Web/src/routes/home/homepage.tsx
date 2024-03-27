@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,} from "react";
 import { Link } from "react-router-dom";
 import { HotelDto } from "../../features/hotels/HotelDto";
 import homebg from "../../assets/homebg.jpg"; 
@@ -24,7 +24,7 @@ export default function Home() {
   
     const handleHotelSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedHotel(e.target.value);
-    };
+    };    
 
     return (
         <>
@@ -72,7 +72,7 @@ export default function Home() {
                     <h1 style={{ position: "absolute", top: "60px" }}>Find Your Perfect Stay</h1>
                     <Form className="hotel-form">
                         <Form.Group controlId="hotelSelect">
-                            <Form.Control as="select" onChange={handleHotelSelect} value={selectedHotel}>
+                            <Form.Control as="select" onChange={() => handleHotelSelect} value={selectedHotel}>
                                 <option>Select a Hotel</option>
                                 {hotels.map((hotel) => (
                                     <option key={hotel.id} value={hotel.id}>{hotel.address}</option>
