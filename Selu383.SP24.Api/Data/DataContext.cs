@@ -2,23 +2,26 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Features.Authorization;
+using Selu383.SP24.Api.Features.Hotels;
 
-namespace Selu383.SP24.Api.Data;
-
-public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
+namespace Selu383.SP24.Api.Data
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
-    }
+   
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        {
+        }
 
-    public DataContext()
-    {
-    }
+        public DataContext()
+        {
+        }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+        }
     }
 }

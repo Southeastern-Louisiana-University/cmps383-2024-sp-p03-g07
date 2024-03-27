@@ -1,32 +1,22 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import Home from "./routes/home";
+import Home from "./routes/home/homepage";
 import Help from "./routes/help";
-import MainLayout from "./routes/_layout";
-import HotelDetails from "./routes/home/hotel-details";
+import HotelDetails from "./routes/home/hotel-details/hoteldetails";
+import FindHotel from "./routes/home/FindHotel";
+import { CachePolicies, Provider } from "use-http";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-        children: [{ path: "hotel-details/:foo", element: <HotelDetails /> }],
-      },
-      {
-        path: "/help",
-        element: <Help />,
-      },
-    ],
-  },
+  { path: "/", element: <Home /> },
+  { path: "/find-hotel", element: <FindHotel /> },
+  { path: "/hotel-details/:foo", element: <HotelDetails /> },
+  { path: "/help", element: <Help /> },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+ReactDOM.render(
+  <Provider options={{ cache: CachePolicies.NO_CACHE }}>
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </Provider>,
+  document.getElementById("root")
 );

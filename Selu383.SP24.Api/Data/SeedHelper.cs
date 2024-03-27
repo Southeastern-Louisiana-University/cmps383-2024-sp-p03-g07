@@ -78,15 +78,28 @@ public static class SeedHelper
             return;
         }
 
-        for (int i = 0; i < 4; i++)
-        {
-            dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Hammond " + i,
-                    Address = "1234 Place st"
-                });
-        }
+
+        dataContext.Set<Hotel>()
+            .Add(new Hotel
+            {
+                Name = "Enstay 1",
+                Address = "225 Baronne St, New Orleans, LA 70112"
+            });
+
+        dataContext.Set<Hotel>()
+            .Add(new Hotel
+            {
+                Name = "Enstay 2",
+                Address = "405 Esplanade Ave, New Orleans, LA 70116"
+            });
+
+
+        dataContext.Set<Hotel>()
+            .Add(new Hotel
+            {
+                Name = "Enstay 3",
+                Address = "200 Convention St, Baton Rouge, LA 70801"
+            });
 
         await dataContext.SaveChangesAsync();
     }
