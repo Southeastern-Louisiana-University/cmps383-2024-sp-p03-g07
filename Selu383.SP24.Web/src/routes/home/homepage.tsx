@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { HotelDto } from "../../features/hotels/HotelDto";
 import homebg from "../../assets/homebg.jpg"; 
@@ -22,9 +22,11 @@ export default function Home() {
             });
     }, []); 
   
-    const handleHotelSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedHotel(e.target.value);
-    };
+
+    const handleHotelSelect = (e: ChangeEvent) => {
+        const target = e.target as HTMLSelectElement;
+        setSelectedHotel(target.value);
+    };    
 
     return (
         <>
