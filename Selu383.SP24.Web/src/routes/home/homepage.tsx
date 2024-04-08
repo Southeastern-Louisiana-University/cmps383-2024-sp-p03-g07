@@ -12,7 +12,7 @@ export default function Home() {
     const [hotels, setHotels] = useState<HotelDto[]>([]);
     const [selectedHotel, setSelectedHotel] = useState<string>("");
     const [checkInDate, setCheckInDate] = useState<Date | null>(null);
-    const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+    const [checkOut, setCheckOut] = useState<Date | null>(null);
 
     useEffect(() => {
         fetch("/api/hotels")
@@ -92,8 +92,8 @@ export default function Home() {
                         </Form.Group>
                         <Form.Group controlId="checkOutDate">
                             <DatePicker
-                                selected={checkOutDate}
-                                onChange={(date: Date) => setCheckOutDate(date)}
+                                selected={checkOut}
+                                onChange={(date: Date) => setCheckOut(date)}
                                 dateFormat="E MMM dd, yyyy"
                                 minDate={checkInDate || new Date()}
                                 className="form-control"
