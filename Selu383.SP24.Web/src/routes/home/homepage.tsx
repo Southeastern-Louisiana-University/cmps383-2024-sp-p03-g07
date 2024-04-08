@@ -1,12 +1,12 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { HotelDto } from "../../features/hotels/HotelDto";
-import homebg from "../../assets/homebg.jpg"; 
 import Form from 'react-bootstrap/Form';
 import { Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./homepage.css";
+import HotelCardGroup from '../../Components/HotelCardGroup';
 
 export default function Home() {
     const [hotels, setHotels] = useState<HotelDto[]>([]);
@@ -35,17 +35,7 @@ export default function Home() {
                 integrity="<KEY>"
                 crossOrigin="anonymous"
             ></link>
-            <section
-                className="homebg"
-                style={{
-                    backgroundImage: `url(${homebg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    minHeight: "100vh",
-                    maxHeight: "100vh",
-                    overflow: "hidden",
-                }}
-            >
+
                 <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
                     <div className="container-fluid">
                         <Link className="navbar-brand" to="/">Enstay</Link>
@@ -103,7 +93,10 @@ export default function Home() {
                         </Link>
                     </Form>
                 </div>
-            </section>
+                <div className="hotel-card">
+                <HotelCardGroup />
+                </div>
+        
         </>
     );
 }

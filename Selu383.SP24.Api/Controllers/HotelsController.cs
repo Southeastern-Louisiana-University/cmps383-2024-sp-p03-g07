@@ -141,7 +141,7 @@ public class HotelsController : ControllerBase
 
         if (!User.IsInRole(RoleNames.Admin))
         {
-            // only admins can change manager ids anyway
+            
             return false;
         }
         return !dataContext.Set<User>().Any(x => x.Id == managerId);
