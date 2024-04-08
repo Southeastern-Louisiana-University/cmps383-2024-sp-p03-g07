@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Card, CardGroup, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import hotelImage1 from '../assets/hotel1.jpg'; // Import the first image
