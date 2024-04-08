@@ -22,6 +22,7 @@ export default function Home() {
             });
     }, []); 
   
+
     const handleHotelSelect = (e: ChangeEvent) => {
         const target = e.target as HTMLSelectElement;
         setSelectedHotel(target.value);
