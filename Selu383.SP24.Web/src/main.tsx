@@ -9,11 +9,15 @@ import HotelDetails from "./routes/home/hotel-details/hoteldetails";
 import FindHotel from "./routes/home/FindHotel";
 import { CachePolicies, Provider } from "use-http";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SignPage from "./routes/signup/signpage";
+import LoginPage from "./routes/login/loginpage";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/find-hotel", element: <FindHotel /> },
   { path: "/hotel-details/:foo", element: <HotelDetails /> },
+  { path: '/signup', element: <SignPage /> },
+  { path: '/login', element: <LoginPage /> },
   { path: "/help", element: <Help /> },
 ]);
 
