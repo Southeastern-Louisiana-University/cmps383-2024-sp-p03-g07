@@ -37,12 +37,12 @@ public class AuthenticationController : ControllerBase
         var user = await userManager.FindByNameAsync(dto.UserName);
         if (user == null)
         {
-            return BadRequest();
+            return BadRequest("No such user");
         }
         var result = await signInManager.CheckPasswordSignInAsync(user, dto.Password, true);
         if (!result.Succeeded)
         {
-            return BadRequest();
+            return BadRequest("Invalid password!!!!");
         }
 
         await signInManager.SignInAsync(user, false);

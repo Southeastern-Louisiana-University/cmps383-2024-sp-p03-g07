@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { HotelDto } from "../../features/hotels/HotelDto";
-import homebg from "../../assets/homebg.jpg"; 
 import Form from 'react-bootstrap/Form';
 import { Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./homepage.css";
+import HotelCardGroup from '../../Components/HotelCardGroup';
 
 export default function Home() {
     const [hotels, setHotels] = useState<HotelDto[]>([]);
     const [selectedHotel, setSelectedHotel] = useState<string>("");
     const [checkInDate, setCheckInDate] = useState<Date | null>(null);
-    const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+    const [checkOut, setCheckOut] = useState<Date | null>(null);
 
     useEffect(() => {
         fetch("/api/hotels")
@@ -22,9 +22,11 @@ export default function Home() {
             });
     }, []); 
   
-    const handleHotelSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedHotel(e.target.value);
-    };
+
+    const handleHotelSelect = (e: ChangeEvent) => {
+        const target = e.target as HTMLSelectElement;
+        setSelectedHotel(target.value);
+    };    
 
     return (
         <>
@@ -34,17 +36,7 @@ export default function Home() {
                 integrity="<KEY>"
                 crossOrigin="anonymous"
             ></link>
-            <section
-                className="homebg"
-                style={{
-                    backgroundImage: `url(${homebg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    minHeight: "100vh",
-                    maxHeight: "100vh",
-                    overflow: "hidden",
-                }}
-            >
+
                 <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
                     <div className="container-fluid">
                         <Link className="navbar-brand" to="/">Enstay</Link>
@@ -63,7 +55,7 @@ export default function Home() {
                             <div className="navbar-nav ms-auto">
                                 <Link className="nav-item nav-link" to="/hotel-details/hoteldetails">Hotels</Link>
                                 <Link className="nav-item nav-link" to="/login">Login</Link>
-                                <Link className="nav-item nav-link" to="/sign-up">Sign-Up</Link>
+                                <Link className="nav-item nav-link" to="/signup">Sign-Up</Link>
                             </div>
                         </div>
                     </div>
@@ -90,8 +82,8 @@ export default function Home() {
                         </Form.Group>
                         <Form.Group controlId="checkOutDate">
                             <DatePicker
-                                selected={checkOutDate}
-                                onChange={(date: Date) => setCheckOutDate(date)}
+                                selected={checkOut}
+                                onChange={(date: Date) => setCheckOut(date)}
                                 dateFormat="E MMM dd, yyyy"
                                 minDate={checkInDate || new Date()}
                                 className="form-control"
@@ -102,7 +94,10 @@ export default function Home() {
                         </Link>
                     </Form>
                 </div>
-            </section>
+                <div className="hotel-card">
+                <HotelCardGroup />
+                </div>
+        
         </>
     );
 }
