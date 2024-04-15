@@ -1,3 +1,5 @@
+
+import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/home/homepage";
@@ -8,6 +10,7 @@ import BookingNO from "./routes/booking/bookingNO";
 import BookingBR from "./routes/booking/bookingBR";
 import BookingLC from "./routes/booking/bookingLC";
 import { CachePolicies, Provider } from "use-http";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },

@@ -1,14 +1,12 @@
-import { Link, useParams } from "react-router-dom";
+//import React from 'react';
+import HotelCardGroup from '../../../Components/HotelCardGroup'; // Adjust the file path based on your folder structure
 
-
-export default function HotelDetails() {
-  const { foo } = useParams();
-  return (
-    <div>
-      <h2>The details for {foo}</h2>
-      <Link to={"/"}>Home</Link>
-    </div>
-    
-    
-  );
+function HotelDetails() {
+    return (
+        <div>
+            <HotelCardGroup />
+        </div>
+    );
 }
+
+export default HotelDetails;
