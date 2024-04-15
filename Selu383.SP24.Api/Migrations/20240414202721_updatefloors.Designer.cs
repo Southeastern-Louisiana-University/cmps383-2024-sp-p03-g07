@@ -12,8 +12,8 @@ using Selu383.SP24.Api.Data;
 namespace Selu383.SP24.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240408165810_RoomReservation")]
-    partial class RoomReservation
+    [Migration("20240414202721_updatefloors")]
+    partial class updatefloors
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -320,6 +320,9 @@ namespace Selu383.SP24.Api.Migrations
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("nvarchar(120)");
+
+                    b.Property<int>("FloorNumber")
+                        .HasColumnType("int");
 
                     b.Property<int?>("HotelId")
                         .IsRequired()

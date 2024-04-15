@@ -6,17 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Selu383.SP24.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class RoomReservation : Migration
+    public partial class roomswithfloors : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "ReservationId",
-                table: "AspNetUsers",
-                type: "int",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "RoomType",
                 columns: table => new
@@ -40,7 +34,8 @@ namespace Selu383.SP24.Api.Migrations
                     HotelId = table.Column<int>(type: "int", nullable: false),
                     RoomTypeId = table.Column<int>(type: "int", nullable: true),
                     Beds = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    FloorNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,11 +108,6 @@ namespace Selu383.SP24.Api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ReservationId",
-                table: "AspNetUsers",
-                column: "ReservationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_HotelReservation_ReservationsId",
                 table: "HotelReservation",
                 column: "ReservationsId");
@@ -142,12 +132,27 @@ namespace Selu383.SP24.Api.Migrations
                 table: "Room",
                 column: "RoomTypeId");
 
+            // Corrected part starts here
+
+            migrationBuilder.AddColumn<int>(
+                name: "ReservationId",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ReservationId",
+                table: "AspNetUsers",
+                column: "ReservationId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Reservation_ReservationId",
                 table: "AspNetUsers",
                 column: "ReservationId",
                 principalTable: "Reservation",
                 principalColumn: "Id");
+
+            // Corrected part ends here
         }
 
         /// <inheritdoc />

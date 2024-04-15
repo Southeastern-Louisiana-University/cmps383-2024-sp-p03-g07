@@ -59,6 +59,7 @@ namespace Selu383.SP24.Api.Controllers
                     IsAvailable = x.IsAvailable,
                     HotelId = x.HotelId,
                     HotelName = x.Hotel.Name,
+                    FloorNumber = x.FloorNumber 
 
                 });
         }
