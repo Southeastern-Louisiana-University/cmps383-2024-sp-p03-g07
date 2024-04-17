@@ -7,9 +7,10 @@ import HotelDetails from "./routes/home/hotel-details/hoteldetails";
 import BookingNO from "./routes/booking/bookingNO";
 import BookingBR from "./routes/booking/bookingBR";
 import BookingLC from "./routes/booking/bookingLC";
-import Login from "./routes/login/loginpage";
 import { CachePolicies, Provider } from "use-http";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SignPage from "./routes/signup/signpage";
+import LoginPage from "./routes/login/loginpage";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
   { path: "/bookingNO", element: <BookingNO/> },
   { path: "/bookingBR", element: <BookingBR/> },
   { path: "/bookingLC", element: <BookingLC/> },
-  {path:"/login",element:<Login/>},
+  { path: '/signup', element: <SignPage /> },
+  { path: '/login', element: <LoginPage /> },
 ]);
 
 ReactDOM.render(
