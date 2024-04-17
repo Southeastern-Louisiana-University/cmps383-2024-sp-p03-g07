@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./homepage.css";
-import HotelCardGroup from '../../Components/HotelCardGroup';
+import HotelCardGroup from '../../components/HotelCardGroup';
 
 export default function Home() {
     const [hotels, setHotels] = useState<HotelDto[]>([]);
@@ -53,8 +53,8 @@ export default function Home() {
                         </button>
                         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                             <div className="navbar-nav ms-auto">
-                                <Link className="nav-item nav-link" to="/hotel-details/hoteldetails">Hotels</Link>
-                                <Link className="nav-item nav-link" to="/login">Login</Link>
+  
+                                <Link className="nav-item nav-link" to="../login">Login</Link>
                                 <Link className="nav-item nav-link" to="/signup">Sign-Up</Link>
                             </div>
                         </div>
@@ -101,3 +101,4 @@ export default function Home() {
         </>
     );
 }
+
