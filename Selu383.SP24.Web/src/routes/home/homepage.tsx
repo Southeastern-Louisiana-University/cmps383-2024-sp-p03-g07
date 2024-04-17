@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./homepage.css";
-import HotelCardGroup from '../../Components/HotelCardGroup';
+import HotelCardGroup from '../../components/HotelCardGroup';
 
 export default function Home() {
     const [hotels, setHotels] = useState<HotelDto[]>([]);
