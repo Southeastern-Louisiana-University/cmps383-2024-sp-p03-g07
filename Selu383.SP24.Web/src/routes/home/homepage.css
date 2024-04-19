@@ -1,28 +1,41 @@
-.home-container {
+.hotelSelect-container {
   display: flex;
   flex-direction: column; /* Align children vertically */
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 90vh;
+  background-color: #fcd34d;
 }
+
 
 h1 {
   position: "absolute", top "50px" ;
+
 }
 
 .hotel-form {
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
-  max-width: 400px; /* Adjust width as needed */
+  max-width: 500px; /* Adjust width as needed */
+  height: 250px;
   width: 90%; /* To keep the form responsive */
   text-align: center; /* Center align form contents */
   font-family: 'Roboto', sans-serif; /* Use a different font */
-  margin-top: -360px; /* Add margin from the top */
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  
+}
+.hotel-form > div {
+margin-bottom: 20px;
 }
 
 .hotel-card{
-  margin-top:-400px;
+  margin-top: -300px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  
 }
-
-

@@ -60,9 +60,10 @@ export default function Home() {
                         </div>
                     </div>
                 </nav>
-                <div className="home-container">
-                    <h1 style={{ position: "absolute", top: "60px" }}>Find Your Perfect Stay</h1>
+                <div className="hotelSelect-container">
+                    <h1 style={{ position: "absolute", top: "90px" }}>Find Your Perfect Stay</h1>
                     <Form className="hotel-form">
+                        <div>
                         <Form.Group controlId="hotelSelect">
                             <Form.Control as="select" onChange={handleHotelSelect} value={selectedHotel}>
                                 <option>Select a Hotel</option>
@@ -71,6 +72,9 @@ export default function Home() {
                                 ))}
                             </Form.Control>
                         </Form.Group>
+                        </div>
+                    
+                        <div>
                         <Form.Group controlId="checkInDate">
                             <DatePicker
                                 selected={checkInDate}
@@ -80,6 +84,9 @@ export default function Home() {
                                 className="form-control"
                                 placeholderText="Check-in Date" />
                         </Form.Group>
+                        </div>
+
+                        <div className="hotelCheckOut-container">
                         <Form.Group controlId="checkOutDate">
                             <DatePicker
                                 selected={checkOut}
@@ -89,6 +96,8 @@ export default function Home() {
                                 className="form-control"
                                 placeholderText="Check-out Date" />
                         </Form.Group>
+                        </div>
+
                         <Link to={`/hotel-details/${selectedHotel}`}>
                             <Button variant="success">View Hotels</Button>
                         </Link>

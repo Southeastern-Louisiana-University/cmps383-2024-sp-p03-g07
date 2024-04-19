@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardGroup, Button } from 'react-bootstrap';
+import { Card, CardGroup, Button, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import hotelImage1 from '../assets/hotel1.jpg'; // Import the first image
 import hotelImage2 from '../assets/hotel2.jpg'; // Import the second image
@@ -19,7 +19,9 @@ const titleStyle: React.CSSProperties = {
 };
 
 const buttonStyle: React.CSSProperties = {
-  marginTop: '10px', // Add margin to separate button from text
+  display: 'flex',
+  justifyContent: 'center',
+
 };
 
 function HotelCardGroup() {
@@ -27,6 +29,8 @@ function HotelCardGroup() {
     <div>
       <h2 style={titleStyle}>Our Hotels</h2>
       <CardGroup>
+      <Row xs={1} sm={1} md={2} lg={3} className="justify-content-center">
+          <Col className="mb-4">
         <Card>
           <Card.Img variant="top" src={hotelImage1} style={imageStyle} />
           <Card.Body>
@@ -41,6 +45,8 @@ function HotelCardGroup() {
             </Link>
           </Card.Body>
         </Card>
+        </Col>
+        <Col className = "mb-4">
         <Card>
           <Card.Img variant="top" src={hotelImage2} style={imageStyle} />
           <Card.Body>
@@ -54,6 +60,8 @@ function HotelCardGroup() {
             </Link>
           </Card.Body>
         </Card>
+        </Col>
+        <Col className = "mb-4">
         <Card>
           <Card.Img variant="top" src={hotelImage3} style={imageStyle} />
           <Card.Body>
@@ -67,6 +75,8 @@ function HotelCardGroup() {
             </Link>
           </Card.Body>
         </Card>
+        </Col>
+        </Row>
       </CardGroup>
     </div>
   );

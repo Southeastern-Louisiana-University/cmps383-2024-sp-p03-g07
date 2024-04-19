@@ -51,6 +51,7 @@ const SignUp: React.FC = () => {
           </div>
         </div>
       </nav>
+      <div>
       <div className="signup-container">
         <h2>Sign Up</h2>
         <form className="signup-form" onSubmit={handleSubmit}>
@@ -77,6 +78,7 @@ const SignUp: React.FC = () => {
           <button type="submit">Sign Up</button>
         </form>
         <p>Already have an account? <Link to="/login">Login</Link></p>
+      </div>
       </div>
     </div>
   );
