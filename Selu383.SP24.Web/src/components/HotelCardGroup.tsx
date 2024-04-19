@@ -6,16 +6,16 @@ import hotelImage2 from '../assets/hotel2.jpg'; // Import the second image
 import hotelImage3 from '../assets/hotel3.jpg'; // Import the third image
 
 const imageStyle: React.CSSProperties = {
-  height: '500px', // Set the desired height for the images
-  objectFit: 'cover', // Ensure the images cover the entire space
-  borderRadius: '10px',
+    height: '500px', // Set the desired height for the images
+    objectFit: 'cover', // Ensure the images cover the entire space
+    borderRadius: '10px',
 };
 
 const titleStyle: React.CSSProperties = {
-  textAlign: 'center', // Center the title text
-  fontSize: '2rem', // Increase font size
-  marginTop: '20px',
-  marginBottom: '20px', // Add space below the title
+    textAlign: 'center', // Center the title text
+    fontSize: '2rem', // Increase font size
+    marginTop: '20px',
+    marginBottom: '20px', // Add space below the title
 };
 
 const buttonStyle: React.CSSProperties = {
