@@ -40,7 +40,7 @@ public class UsersController : ControllerBase
                 return BadRequest();
             }
         }
-        catch (InvalidOperationException e) when(e.Message.StartsWith("Role") && e.Message.EndsWith("does not exist."))
+        catch (InvalidOperationException e) when (e.Message.StartsWith("Role") && e.Message.EndsWith("does not exist."))
         {
             return BadRequest();
         }

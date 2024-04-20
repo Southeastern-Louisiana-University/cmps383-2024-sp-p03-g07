@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import './signpage.css'; // Import CSS file for styling
+import Navbar from '../../Components/Navbar';
 
 const SignUp: React.FC = () => {
   // State variables to store form input values
@@ -43,28 +44,9 @@ const SignUp: React.FC = () => {
 
   return (
       <div>
-        <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
-          <div className="container-fluid">
-            <Link className="navbar-brand" to="/">Enstay</Link>
-            <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div className="navbar-nav ms-auto">
-                <Link className="nav-item nav-link" to="/login">Login</Link>
-                <Link className="nav-item nav-link" to="/signup">Sign-Up</Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+        <div className="navbar">
+        <Navbar/>
+        </div>
         <div className="signup-container">
           <h2>Sign Up</h2>
           <form className="signup-form" onSubmit={handleSubmit}>
