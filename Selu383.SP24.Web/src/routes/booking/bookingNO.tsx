@@ -90,10 +90,7 @@ export default function BookingNO() {
             return queen;
         } else if (room.beds === 'Single King') {
             return king;
-        } else {
-            // Default image if the bed type is not recognized
-            return null;
-        }
+        } 
     };
 
     return (
@@ -172,7 +169,7 @@ export default function BookingNO() {
                                 <Col key={room.id}>
                                     <div className="card-wrapper mb-3">
                                         <Card>
-                                            <Card.Img variant="top" src={getRoomImage(room) ?? ''} style={{ width: '100%', height: '150px' }} />
+                                            <Card.Img variant="top" src={getRoomImage(room)} style={{ width: '100%', height: '150px' }} />
                                             <Card.Body>
                                                 <Card.Title>{room.beds}</Card.Title>
                                                 <Card.Text>

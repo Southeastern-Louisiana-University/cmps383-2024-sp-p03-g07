@@ -62,7 +62,7 @@ function HotelCardGroup() {
               Welcome to Enstay Lake Charles, where comfort meets convenience. Our hotel is ideally situated near popular attractions and business destinations,
               making it the perfect choice for both leisure and business travelers. Enjoy modern amenities, spacious accommodations, and personalized service throughout your stay.
             </Card.Text>
-            <Link to="/bookingLC"> {/* Link to the booking page */}
+            <Link to="/booking"> {/* Link to the booking page */}
               <Button variant="primary" style={buttonStyle}>Book now</Button> {/* Button to book now */}
             </Link>
           </Card.Body>
