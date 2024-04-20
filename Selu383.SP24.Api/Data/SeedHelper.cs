@@ -124,9 +124,9 @@ namespace Selu383.SP24.Api.Data
 
             var predefinedRooms = new List<RoomType>
             {
-                new RoomType { Name = "Twin Bed", NumberOfBeds = 2},
-                new RoomType { Name = "Queen Bed", NumberOfBeds = 2},
-                new RoomType { Name = "King Bed", NumberOfBeds = 1}
+                new RoomType { Name = "Double Twin", NumberOfBeds = 2},
+                new RoomType { Name = "Double Queen", NumberOfBeds = 2},
+                new RoomType { Name = "Single King", NumberOfBeds = 1}
             };
 
             await roomTypes.AddRangeAsync(predefinedRooms);
@@ -149,7 +149,7 @@ namespace Selu383.SP24.Api.Data
                 for (int floor = 1; floor <= 6; floor++)
                 {
                     int roomCount = 0;
-                    int roomTypeIndex = 0; // Start with the first room type
+                    int roomTypeIndex = 0; 
                     while (roomCount < 20)
                     {
                         var roomType = roomTypes[roomTypeIndex];
@@ -158,12 +158,12 @@ namespace Selu383.SP24.Api.Data
                             Beds = roomType.Name,
                             IsAvailable = true,
                             HotelId = hotel.Id,
-                            RoomType = roomType, // Set the RoomType
-                            FloorNumber = floor // Set the floor number
+                            RoomType = roomType,
+                            FloorNumber = floor 
                         });
 
                         roomCount++;
-                        roomTypeIndex = (roomTypeIndex + 1) % roomTypes.Count; // Move to the next room type, looping back to the start if necessary
+                        roomTypeIndex = (roomTypeIndex + 1) % roomTypes.Count; 
                     }
                 }
             }
@@ -187,29 +187,44 @@ namespace Selu383.SP24.Api.Data
                 .ToListAsync();
 
             var testUser = await userManager.FindByNameAsync("sue");
+            var random = new Random();
 
-            var room = rooms.FirstOrDefault();
-
-            if (room != null)
+            foreach (var hotel in rooms.Select(r => r.Hotel).Distinct())
             {
-                var checkIn = DateTime.Today.AddDays(1);
-                var checkOut = checkIn.AddDays(10);
+                var hotelRooms = rooms.Where(r => r.HotelId == hotel.Id).ToList();
 
-                var reservation = new Reservation
+                for (int i = 0; i < 20; i++)
                 {
-                    CheckIn = checkIn,
-                    CheckOut = checkOut,
-                    ReservationNumber = 1234,
-                    Room = room,
-                    RoomId = room.Id,
-                    HotelName = room.Hotel?.Name,
-                    UserId = testUser.Id
-                };
+                    var room = hotelRooms[random.Next(hotelRooms.Count)];
 
-                reservations.Add(reservation);
-                await dataContext.SaveChangesAsync();
+                    var reservation = new Reservation
+                    {
+                        CheckIn = DateTime.Today,
+                        CheckOut = new DateTime(2024, 5, 20),
+                        ReservationNumber = GenerateReservationNumber(),
+                        RoomId = room.Id,
+                        UserId = testUser.Id
+                    };
+
+                    reservations.Add(reservation);
+
+                    // Update room availability
+                    room.IsAvailable = false;
+                }
             }
+
+            // Save changes to database
+            await dataContext.SaveChangesAsync();
         }
+
+        // Method to generate a random reservation number
+        private static int GenerateReservationNumber()
+        {
+            return new Random().Next(1000, 10000);
+        }
+
+
+
     }
 }
 

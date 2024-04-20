@@ -84,11 +84,11 @@ export default function BookingNO() {
     };
 
     const getRoomImage = (room: RoomDto) => {
-        if (room.beds === 'Twin Bed') {
+        if (room.beds === 'Double Twin') {
             return twins;
-        } else if (room.beds === 'Queen Bed') {
+        } else if (room.beds === 'Double Queen') {
             return queen;
-        } else if (room.beds === 'King Bed') {
+        } else if (room.beds === 'Single King') {
             return king;
         } else {
             // Default image if the bed type is not recognized
@@ -129,6 +129,11 @@ export default function BookingNO() {
                         </div>
                     </div>
                 )}
+                
+                <Button variant="success" size="lg" className="mt-3" onClick={() => {
+                window.location.href = `/reservation?selectedRooms=${JSON.stringify(selectedRooms)}&checkIn=${checkIn?.toISOString()}&checkOut=${checkOut?.toISOString()}`;
+                }}>Go to Reservation</Button>
+
                 <h2>Select Dates:</h2>
                 <form>
                     <div className="mb-3">

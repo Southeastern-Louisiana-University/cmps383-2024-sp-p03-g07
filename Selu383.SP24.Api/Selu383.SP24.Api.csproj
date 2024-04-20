@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Selu383.SP24.Web\Selu383.SP24.Web.esproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
