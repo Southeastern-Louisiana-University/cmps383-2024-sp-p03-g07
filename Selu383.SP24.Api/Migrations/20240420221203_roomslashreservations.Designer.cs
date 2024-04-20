@@ -12,8 +12,8 @@ using Selu383.SP24.Api.Data;
 namespace Selu383.SP24.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240414202721_updatefloors")]
-    partial class updatefloors
+    [Migration("20240420221203_roomslashreservations")]
+    partial class roomslashreservations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
