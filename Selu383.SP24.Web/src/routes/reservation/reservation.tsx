@@ -31,7 +31,7 @@ export default function Reservation() {
                         <Card style={{ height: '100%' }}>
                             <Row className="g-0">
                                 <Col md={4}>
-                                    <Card.Img src={getRoomImage(selectedRoom.room) } alt={selectedRoom.room.beds} style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
+                                <Card.Img src={getRoomImage(selectedRoom.room) ?? ''} alt={selectedRoom.room.beds || ''} style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
                                 </Col>
                                 <Col md={8}>
                                     <Card.Body>
@@ -52,7 +52,4 @@ export default function Reservation() {
         </Container>
     );
 }
-
-
-
 
