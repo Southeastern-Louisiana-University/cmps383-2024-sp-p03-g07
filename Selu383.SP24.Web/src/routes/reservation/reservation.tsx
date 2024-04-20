@@ -9,8 +9,8 @@ export default function Reservation() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const selectedRooms: { room: RoomDto, quantity: number }[] = JSON.parse(params.get('selectedRooms') || '[]');
-    const checkIn = params.get('checkIn') ? new Date(params.get('checkIn')!) : undefined;
-    const checkOut = params.get('checkOut') ? new Date(params.get('checkOut')!) : undefined;
+    const checkIn = params.get('checkIn') ? new Date(params.get('checkIn')!) : null;
+    const checkOut = params.get('checkOut') ? new Date(params.get('checkOut')!) : null;
 
     const getRoomImage = (room: RoomDto) => {
         if (room.beds === 'Double Twin') {
@@ -55,4 +55,5 @@ export default function Reservation() {
         </Container>
     );
 }
+
 
