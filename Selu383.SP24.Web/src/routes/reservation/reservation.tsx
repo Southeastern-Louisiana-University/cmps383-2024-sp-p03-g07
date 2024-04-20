@@ -9,8 +9,8 @@ export default function Reservation() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const selectedRooms: { room: RoomDto, quantity: number }[] = JSON.parse(params.get('selectedRooms') || '[]');
-    const checkIn = params.get('checkIn') ? new Date(params.get('checkIn')!) : null;
-    const checkOut = params.get('checkOut') ? new Date(params.get('checkOut')!) : null;
+    const checkIn = new Date(params.get('checkIn')!);
+    const checkOut = new Date(params.get('checkOut')!);
 
     const getRoomImage = (room: RoomDto) => {
         if (room.beds === 'Double Twin') {
@@ -34,7 +34,7 @@ export default function Reservation() {
                         <Card style={{ height: '100%' }}>
                             <Row className="g-0">
                                 <Col md={4}>
-                                    <Card.Img src={getRoomImage(selectedRoom.room) } alt={selectedRoom.room.beds} style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
+                                    <Card.Img src={getRoomImage(selectedRoom.room) ?? ''} alt={selectedRoom.room.beds} style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
                                 </Col>
                                 <Col md={8}>
                                     <Card.Body>
@@ -42,8 +42,8 @@ export default function Reservation() {
                                         <Card.Text>
                                             Room ID: {selectedRoom.room.id}<br />
                                             Type: {selectedRoom.room.beds}<br />
-                                            Check-in Date: {checkIn?.toLocaleDateString()}<br />
-                                            Check-out Date: {checkOut?.toLocaleDateString()}
+                                            Check-in Date: {checkIn.toLocaleDateString()}<br />
+                                            Check-out Date: {checkOut.toLocaleDateString()}
                                         </Card.Text>
                                     </Card.Body>
                                 </Col>
@@ -54,6 +54,8 @@ export default function Reservation() {
             </Row>
         </Container>
     );
+}
+
 }
 
 
