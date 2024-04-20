@@ -14,7 +14,7 @@ export default function BookingLC() {
     const [selectedRooms, setSelectedRooms] = useState<{ room: RoomDto, quantity: number }[]>([]);
     const [cartOpen, setCartOpen] = useState(false);
 
-    const hotelId = 3;
+    const hotelId = 2;
 
     const handleCheckInChange = (date: Date | null) => {
         setCheckIn(date);

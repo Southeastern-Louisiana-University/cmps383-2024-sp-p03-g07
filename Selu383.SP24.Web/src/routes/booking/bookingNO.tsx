@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -6,10 +6,18 @@ import { RoomDto } from '../../features/rooms/RoomDto';
 import twins from '../../assets/twins.jpg';
 import queen from '../../assets/queens.jpg';
 import king from '../../assets/king.jpg';
+import { useLocation } from 'react-router-dom';
+import { ReservationDto } from '../../features/reservations/ReservationDto';
+import Navbar from '../../Components/Navbar';
 
 export default function BookingNO() {
-    const [checkIn, setCheckIn] = useState<Date | null>(null);
-    const [checkOut, setCheckOut] = useState<Date | null>(null);
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const checkInParam = params.get('checkIn');
+    const checkOutParam = params.get('checkOut');
+
+    const [checkIn, setCheckIn] = useState<Date | null>(checkInParam ? new Date(checkInParam) : null);
+    const [checkOut, setCheckOut] = useState<Date | null>(checkOutParam ? new Date(checkOutParam) : null);
     const [availableRooms, setAvailableRooms] = useState<RoomDto[]>([]);
     const [selectedRooms, setSelectedRooms] = useState<{ room: RoomDto, quantity: number }[]>([]);
     const [cartOpen, setCartOpen] = useState(false);
@@ -24,22 +32,37 @@ export default function BookingNO() {
         setCheckOut(date);
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            // Fetch available rooms data only on form submission
-            const availableRoomsResponse = await fetch(`/api/rooms/byhotel/${hotelId}`);
-            const availableRoomsData: RoomDto[] = await availableRoomsResponse.json();
+    useEffect(() => {
+        const fetchAvailableRoomsAndReservations = async () => {
+            try {
+                if (!checkIn || !checkOut) return;
 
-            // Filter available rooms based on check-in and check-out dates
-            const filteredRooms = availableRoomsData.filter(room => room.isAvailable === true);
+                const [availableRoomsResponse, reservationsResponse] = await Promise.all([
+                    fetch(`/api/rooms/byhotel/${hotelId}`),
+                    fetch(`/api/reservations?checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}`)
+                ]);
 
-            // Update available rooms state
-            setAvailableRooms(filteredRooms);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+                const [availableRoomsData, reservationsData]: [RoomDto[], ReservationDto[]] = await Promise.all([
+                    availableRoomsResponse.json(),
+                    reservationsResponse.json()
+                ]);
+
+                const filteredRooms = availableRoomsData.filter(room => {
+                    // Check if room has reservations conflicting with the given check-in and check-out times
+                    return !reservationsData.some(reservation =>
+                        reservation.roomId === room.id &&
+                        ((new Date(reservation.checkIn) < checkOut && new Date(reservation.checkOut) > checkIn) ||
+                        (new Date(reservation.checkIn) >= checkIn && new Date(reservation.checkIn) < checkOut)));
+                });
+
+                setAvailableRooms(filteredRooms);
+            } catch (error) {
+                console.error('Error fetching available rooms and reservations:', error);
+            }
+        };
+
+        fetchAvailableRoomsAndReservations();
+    }, [checkIn, checkOut]);
 
     const handleRoomSelect = (room: RoomDto) => {
         const existingRoomIndex = selectedRooms.findIndex(selectedRoom => selectedRoom.room.id === room.id);
@@ -81,8 +104,11 @@ export default function BookingNO() {
                 integrity="<KEY>"
                 crossOrigin="anonymous"
             ></link>
+            <div className="navbar">
+            <Navbar/>
+            </div>
             <div>
-                <Button variant="info" size="sm" className="mt-3" onClick={() => setCartOpen(!cartOpen)}>View Cart ({selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0)})</Button>
+                <Button variant="info" size="sm" className="mt-5" onClick={() => setCartOpen(!cartOpen)}> Reservations ({selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0)})</Button>
                 {cartOpen && (
                     <div>
                         <h2 className="mt-3 mb-2">Selected Rooms:</h2>
@@ -104,7 +130,7 @@ export default function BookingNO() {
                     </div>
                 )}
                 <h2>Select Dates:</h2>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <div className="mb-3">
                         <label htmlFor="checkIn" className="form-label">Check-in Date:</label>
                         <DatePicker
@@ -129,9 +155,6 @@ export default function BookingNO() {
                             required
                         />
                     </div>
-                    <Button variant="primary" type="submit">
-                        See Available Rooms
-                    </Button>
                 </form>
             </div>
 
