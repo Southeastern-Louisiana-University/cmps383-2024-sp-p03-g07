@@ -36,7 +36,7 @@ export default function Home() {
                 integrity="<KEY>"
                 crossOrigin="anonymous"
             ></link>
-
+                
                 <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
                     <div className="container-fluid">
                         <Link className="navbar-brand" to="/">Enstay</Link>
@@ -50,17 +50,20 @@ export default function Home() {
                             aria-label="Toggle navigation"
                         >
                             <span className="navbar-toggler-icon"></span>
-                        </button>
+                        </button>                       
                         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                             <div className="navbar-nav ms-auto">
+                                
                                 <Link className="nav-item nav-link" to="../login">Login</Link>
                                 <Link className="nav-item nav-link" to="/signup">Sign-Up</Link>
+                                
                             </div>
                         </div>
                     </div>
                 </nav>
+                
                 <div className="hotelSelect-container">
-                    <h1 style={{ position: "absolute", top: "90px" }}>Find Your Perfect Stay</h1>
+                    <h1 style={{ position: "absolute", top: "70px" }}>Find Your Perfect Stay</h1>
                     <Form className="hotel-form">
                         <div>
                         <Form.Group controlId="hotelSelect">
