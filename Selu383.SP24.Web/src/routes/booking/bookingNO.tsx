@@ -8,7 +8,7 @@ import queen from '../../assets/queens.jpg';
 import king from '../../assets/king.jpg';
 import { useLocation } from 'react-router-dom';
 import { ReservationDto } from '../../features/reservations/ReservationDto';
-import Navbar from '../../Components/Navbar';
+import Navbar from '../../components/Navbar';
 
 export default function BookingNO() {
     const location = useLocation();

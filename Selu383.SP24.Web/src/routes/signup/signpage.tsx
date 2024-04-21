@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import './signpage.css'; // Import CSS file for styling
-import Navbar from '../../Components/Navbar';
+import Navbar from '../../components/Navbar';
 
 const SignUp: React.FC = () => {
   // State variables to store form input values
