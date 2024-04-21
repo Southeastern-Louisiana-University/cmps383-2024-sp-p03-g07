@@ -354,6 +354,9 @@ namespace Selu383.SP24.Api.Migrations
                     b.Property<int>("NumberOfBeds")
                         .HasColumnType("int");
 
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("RoomType");

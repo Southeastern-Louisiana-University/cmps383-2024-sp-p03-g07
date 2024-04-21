@@ -10,5 +10,6 @@ namespace Selu383.SP24.Api.Features.Rooms
         public string? HotelName { get; set; }
         public bool IsAvailable { get; set; }
         public int FloorNumber { get; set; }
+        public int Price { get; set; }
     }
 }

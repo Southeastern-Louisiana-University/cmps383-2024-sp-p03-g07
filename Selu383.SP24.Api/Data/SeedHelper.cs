@@ -98,17 +98,18 @@ namespace Selu383.SP24.Api.Data
             if (!await roomTypes.AnyAsync())
             {
                 var demoRoomTypes = new List<RoomType>
-                {
-                    new RoomType { Name = "Double Twin", NumberOfBeds = 2},
-                    new RoomType { Name = "Double Queen", NumberOfBeds = 2},
-                    new RoomType { Name = "Single King", NumberOfBeds = 1}
-                };
+        {
+            new RoomType { Name = "Double Twin", NumberOfBeds = 2, Price = 200 },
+            new RoomType { Name = "Double Queen", NumberOfBeds = 2, Price = 250 },
+            new RoomType { Name = "Single King", NumberOfBeds = 1, Price = 225 }
+        };
 
                 await roomTypes.AddRangeAsync(demoRoomTypes);
             }
 
             await dataContext.SaveChangesAsync();
         }
+
 
         private static async Task AddRooms(DataContext dataContext)
         {
@@ -122,21 +123,28 @@ namespace Selu383.SP24.Api.Data
 
                 foreach (var hotel in hotels)
                 {
+                   
+                    int roomTypeIndex = 0;
+
                     for (int floor = 1; floor <= 6; floor++)
                     {
-                        foreach (var roomType in roomTypes)
+                       
+                        var shuffledRoomTypes = roomTypes.OrderBy(x => Guid.NewGuid()).ToList();
+
+                        for (int i = 0; i < 20; i++)
                         {
-                            for (int i = 0; i < 20; i++)
+                            var roomType = shuffledRoomTypes[roomTypeIndex % shuffledRoomTypes.Count];
+
+                            demoRooms.Add(new Room
                             {
-                                demoRooms.Add(new Room
-                                {
-                                    Beds = roomType.Name,
-                                    IsAvailable = true,
-                                    HotelId = hotel.Id,
-                                    RoomType = roomType,
-                                    FloorNumber = floor
-                                });
-                            }
+                                Beds = roomType.Name,
+                                IsAvailable = true,
+                                HotelId = hotel.Id,
+                                RoomType = roomType,
+                                FloorNumber = floor
+                            });
+
+                            roomTypeIndex++;
                         }
                     }
                 }
@@ -145,6 +153,7 @@ namespace Selu383.SP24.Api.Data
                 await dataContext.SaveChangesAsync();
             }
         }
+
 
 
 
