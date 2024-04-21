@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -6,10 +6,18 @@ import { RoomDto } from '../../features/rooms/RoomDto';
 import twins from '../../assets/twins.jpg';
 import queen from '../../assets/queens.jpg';
 import king from '../../assets/king.jpg';
+import { useLocation } from 'react-router-dom';
+import { ReservationDto } from '../../features/reservations/ReservationDto';
+import Navbar from '../../components/Navbar';
 
 export default function BookingLC() {
-    const [checkIn, setCheckIn] = useState<Date | null>(null);
-    const [checkOut, setCheckOut] = useState<Date | null>(null);
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const checkInParam = params.get('checkIn');
+    const checkOutParam = params.get('checkOut');
+
+    const [checkIn, setCheckIn] = useState<Date | null>(checkInParam ? new Date(checkInParam) : null);
+    const [checkOut, setCheckOut] = useState<Date | null>(checkOutParam ? new Date(checkOutParam) : null);
     const [availableRooms, setAvailableRooms] = useState<RoomDto[]>([]);
     const [selectedRooms, setSelectedRooms] = useState<{ room: RoomDto, quantity: number }[]>([]);
     const [cartOpen, setCartOpen] = useState(false);
@@ -24,22 +32,37 @@ export default function BookingLC() {
         setCheckOut(date);
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            // Fetch available rooms data only on form submission
-            const availableRoomsResponse = await fetch(`/api/rooms/byhotel/${hotelId}`);
-            const availableRoomsData: RoomDto[] = await availableRoomsResponse.json();
+    useEffect(() => {
+        const fetchAvailableRoomsAndReservations = async () => {
+            try {
+                if (!checkIn || !checkOut) return;
 
-            // Filter available rooms based on check-in and check-out dates
-            const filteredRooms = availableRoomsData.filter(room => room.isAvailable === true);
+                const [availableRoomsResponse, reservationsResponse] = await Promise.all([
+                    fetch(`/api/rooms/byhotel/${hotelId}`),
+                    fetch(`/api/reservations?checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}`)
+                ]);
 
-            // Update available rooms state
-            setAvailableRooms(filteredRooms);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+                const [availableRoomsData, reservationsData]: [RoomDto[], ReservationDto[]] = await Promise.all([
+                    availableRoomsResponse.json(),
+                    reservationsResponse.json()
+                ]);
+
+                const filteredRooms = availableRoomsData.filter(room => {
+                    // Check if room has reservations conflicting with the given check-in and check-out times
+                    return !reservationsData.some(reservation =>
+                        reservation.roomId === room.id &&
+                        ((new Date(reservation.checkIn) < checkOut && new Date(reservation.checkOut) > checkIn) ||
+                        (new Date(reservation.checkIn) >= checkIn && new Date(reservation.checkIn) < checkOut)));
+                });
+
+                setAvailableRooms(filteredRooms);
+            } catch (error) {
+                console.error('Error fetching available rooms and reservations:', error);
+            }
+        };
+
+        fetchAvailableRoomsAndReservations();
+    }, [checkIn, checkOut]);
 
     const handleRoomSelect = (room: RoomDto) => {
         const existingRoomIndex = selectedRooms.findIndex(selectedRoom => selectedRoom.room.id === room.id);
@@ -61,16 +84,13 @@ export default function BookingLC() {
     };
 
     const getRoomImage = (room: RoomDto) => {
-        if (room.beds === 'Twin Bed') {
+        if (room.beds === 'Double Twin') {
             return twins;
-        } else if (room.beds === 'Queen Bed') {
+        } else if (room.beds === 'Double Queen') {
             return queen;
-        } else if (room.beds === 'King Bed') {
+        } else if (room.beds === 'Single King') {
             return king;
-        } else {
-            // Default image if the bed type is not recognized
-            return null;
-        }
+        } 
     };
 
     return (
@@ -81,8 +101,11 @@ export default function BookingLC() {
                 integrity="<KEY>"
                 crossOrigin="anonymous"
             ></link>
+            <div className="navbar">
+                <Navbar/>
+            </div>
             <div>
-                <Button variant="info" size="sm" className="mt-3" onClick={() => setCartOpen(!cartOpen)}>View Cart ({selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0)})</Button>
+                <Button variant="info" size="sm" className="mt-5" onClick={() => setCartOpen(!cartOpen)}> Reservations ({selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0)})</Button>
                 {cartOpen && (
                     <div>
                         <h2 className="mt-3 mb-2">Selected Rooms:</h2>
@@ -93,8 +116,8 @@ export default function BookingLC() {
                                         <Card.Title>{selectedRoom.room.beds}</Card.Title>
                                         <Card.Text>
                                             Room ID: {selectedRoom.room.id}<br />
-                                            Type: {selectedRoom.room.beds}<br />
-                                            Available: {selectedRoom.room.isAvailable ? 'Yes' : 'No'}
+                                            Available: {selectedRoom.room.isAvailable ? 'Yes' : 'No'}<br />
+                                            Price: ${selectedRoom.room.price} per night
                                         </Card.Text>
                                         <Button variant="danger" size="sm" onClick={() => handleRemoveFromCart(index)}>Remove</Button>
                                     </Card.Body>
@@ -103,8 +126,13 @@ export default function BookingLC() {
                         </div>
                     </div>
                 )}
+                
+                <Button variant="success" size="lg" className="mt-3" onClick={() => {
+                window.location.href = `/reservation?selectedRooms=${JSON.stringify(selectedRooms)}&checkIn=${checkIn?.toISOString()}&checkOut=${checkOut?.toISOString()}`;
+                }}>Go to Reservation</Button>
+
                 <h2>Select Dates:</h2>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <div className="mb-3">
                         <label htmlFor="checkIn" className="form-label">Check-in Date:</label>
                         <DatePicker
@@ -129,9 +157,6 @@ export default function BookingLC() {
                             required
                         />
                     </div>
-                    <Button variant="primary" type="submit">
-                        See Available Rooms
-                    </Button>
                 </form>
             </div>
 
@@ -144,13 +169,13 @@ export default function BookingLC() {
                                 <Col key={room.id}>
                                     <div className="card-wrapper mb-3">
                                         <Card>
-                                            <Card.Img variant="top" src={getRoomImage(room) ?? ''} style={{ width: '100%', height: '150px' }} />
+                                            <Card.Img variant="top" src={getRoomImage(room)} style={{ width: '100%', height: '150px' }} />
                                             <Card.Body>
                                                 <Card.Title>{room.beds}</Card.Title>
                                                 <Card.Text>
-                                                    Room ID: {room.id}<br />
-                                                    Type: {room.beds}<br />
-                                                    Available: {room.isAvailable ? 'Yes' : 'No'}
+                                                    Floor: {room.floorNumber}<br />
+                                                    Available: {room.isAvailable ? 'Yes' : 'No'}<br />
+                                                    Price: ${room.price} per night
                                                 </Card.Text>
                                                 <Button variant="primary" onClick={() => handleRoomSelect(room)}>Select</Button>
                                             </Card.Body>

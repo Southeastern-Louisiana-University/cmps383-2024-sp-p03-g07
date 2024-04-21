@@ -5,7 +5,7 @@
 namespace Selu383.SP24.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class seedhelpfix : Migration
+    public partial class roomdist : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

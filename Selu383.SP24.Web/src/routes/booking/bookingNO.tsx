@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -102,7 +102,7 @@ export default function BookingNO() {
                 crossOrigin="anonymous"
             ></link>
             <div className="navbar">
-            <Navbar/>
+                <Navbar/>
             </div>
             <div>
                 <Button variant="info" size="sm" className="mt-5" onClick={() => setCartOpen(!cartOpen)}> Reservations ({selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0)})</Button>
@@ -116,8 +116,8 @@ export default function BookingNO() {
                                         <Card.Title>{selectedRoom.room.beds}</Card.Title>
                                         <Card.Text>
                                             Room ID: {selectedRoom.room.id}<br />
-                                            Type: {selectedRoom.room.beds}<br />
-                                            Available: {selectedRoom.room.isAvailable ? 'Yes' : 'No'}
+                                            Available: {selectedRoom.room.isAvailable ? 'Yes' : 'No'}<br />
+                                            Price: ${selectedRoom.room.price} per night
                                         </Card.Text>
                                         <Button variant="danger" size="sm" onClick={() => handleRemoveFromCart(index)}>Remove</Button>
                                     </Card.Body>
@@ -173,9 +173,9 @@ export default function BookingNO() {
                                             <Card.Body>
                                                 <Card.Title>{room.beds}</Card.Title>
                                                 <Card.Text>
-                                                    Room ID: {room.id}<br />
-                                                    Type: {room.beds}<br />
-                                                    Available: {room.isAvailable ? 'Yes' : 'No'}
+                                                    Floor: {room.floorNumber}<br />
+                                                    Available: {room.isAvailable ? 'Yes' : 'No'}<br />
+                                                    Price: ${room.price} per night
                                                 </Card.Text>
                                                 <Button variant="primary" onClick={() => handleRoomSelect(room)}>Select</Button>
                                             </Card.Body>

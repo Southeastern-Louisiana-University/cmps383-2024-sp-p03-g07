@@ -12,8 +12,8 @@ using Selu383.SP24.Api.Data;
 namespace Selu383.SP24.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240421021556_seedhelpfix")]
-    partial class seedhelpfix
+    [Migration("20240421194235_roomdist")]
+    partial class roomdist
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -355,6 +355,9 @@ namespace Selu383.SP24.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfBeds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

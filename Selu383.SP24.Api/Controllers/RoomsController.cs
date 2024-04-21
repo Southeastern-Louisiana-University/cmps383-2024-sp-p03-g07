@@ -52,6 +52,7 @@ namespace Selu383.SP24.Api.Controllers
         private IQueryable<RoomDto> GetRoomDtos(IQueryable<Room> rooms)
         {
             return rooms
+                .Include(x => x.RoomType)
                 .Select(x => new RoomDto
                 {
                     Id = x.Id,
@@ -59,9 +60,10 @@ namespace Selu383.SP24.Api.Controllers
                     IsAvailable = x.IsAvailable,
                     HotelId = x.HotelId,
                     HotelName = x.Hotel.Name,
-                    FloorNumber = x.FloorNumber 
-
+                    FloorNumber = x.FloorNumber,
+                    Price = x.RoomType.Price
                 });
         }
+
     }
 }
