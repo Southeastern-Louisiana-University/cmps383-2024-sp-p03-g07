@@ -183,16 +183,24 @@ namespace Selu383.SP24.Api.Data
 
             foreach (var hotel in hotels)
             {
-                var existingDemoReservations = await reservations
-                    .Where(r => r.UserId == demoUser.Id && r.Room.HotelId == hotel.Id)
+                // Retrieve all reservations for this hotel
+                var hotelReservations = await reservations
+                    .Where(r => r.Room.HotelId == hotel.Id)
                     .ToListAsync();
 
-                // If demo reservations already exist in this hotel, continue to the next hotel
-                if (existingDemoReservations.Any())
+                // Remove references in Reservation table for this hotel
+                reservations.RemoveRange(hotelReservations);
+
+                // Update room availability in-memory before adding new reservations
+                foreach (var room in hotel.Rooms)
                 {
-                    continue;
+                    room.IsAvailable = true; // Reset availability
                 }
 
+                // Save changes to update room availability
+                await dataContext.SaveChangesAsync();
+
+                // Proceed with adding new reservations
                 var availableRooms = hotel.Rooms.Where(r => r.IsAvailable).ToList();
 
                 // Limit reservations to 20 or available rooms count, whichever is smaller
@@ -223,7 +231,8 @@ namespace Selu383.SP24.Api.Data
             await dataContext.SaveChangesAsync();
         }
 
-        // Method to generate a random reservation number
+
+
         private static int GenerateReservationNumber(Random random)
         {
             return random.Next(1000, 10000);
