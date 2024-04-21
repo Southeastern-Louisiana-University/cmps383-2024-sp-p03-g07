@@ -71,7 +71,7 @@ const Login: React.FC = () => {
           </div>
         </nav>
         <div className="login-container">
-          <h2>Log In</h2>
+          <h2 className= "perimeter-text">Log In</h2>
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label><strong>Username:</strong></label>
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
             </div>
             <button type="submit">Log In</button>
           </form>
-          <p>Don't have an account? <Link to="/signup">Signup</Link></p>
+          <p className= "perimeter-text">Don't have an account? <Link to="/signup">Signup</Link></p>
         </div>
       </div>
   );

@@ -51,4 +51,6 @@
   a:hover {
     text-decoration: underline;
   }
-  
+  .perimeter-text {
+    color: white;
+  }
