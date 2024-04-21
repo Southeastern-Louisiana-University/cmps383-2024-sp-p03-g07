@@ -33,82 +33,60 @@ namespace Selu383.SP24.Api.Data
             const string defaultPassword = "Password123!";
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
-            if (userManager.Users.Any())
+            if (!userManager.Users.Any())
             {
-                return;
+                var users = new List<User>
+                {
+                    new User { UserName = "galkadi" },
+                    new User { UserName = "bob" },
+                    new User { UserName = "sue" }
+                };
+
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, defaultPassword);
+                    if (user.UserName == "galkadi")
+                        await userManager.AddToRoleAsync(user, RoleNames.Admin);
+                    else
+                        await userManager.AddToRoleAsync(user, RoleNames.User);
+                }
             }
-
-            var adminUser = new User
-            {
-                UserName = "galkadi"
-            };
-            await userManager.CreateAsync(adminUser, defaultPassword);
-            await userManager.AddToRoleAsync(adminUser, RoleNames.Admin);
-
-            var bob = new User
-            {
-                UserName = "bob"
-            };
-            await userManager.CreateAsync(bob, defaultPassword);
-            await userManager.AddToRoleAsync(bob, RoleNames.User);
-
-            var sue = new User
-            {
-                UserName = "sue"
-            };
-            await userManager.CreateAsync(sue, defaultPassword);
-            await userManager.AddToRoleAsync(sue, RoleNames.User);
         }
 
         private static async Task AddRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
-            if (roleManager.Roles.Any())
-            {
-                return;
-            }
-            await roleManager.CreateAsync(new Role
-            {
-                Name = RoleNames.Admin
-            });
 
-            await roleManager.CreateAsync(new Role
+            if (!roleManager.Roles.Any())
             {
-                Name = RoleNames.User
-            });
+                var roles = new List<Role>
+                {
+                    new Role { Name = RoleNames.Admin },
+                    new Role { Name = RoleNames.User }
+                };
+
+                foreach (var role in roles)
+                {
+                    await roleManager.CreateAsync(role);
+                }
+            }
         }
 
         private static async Task AddHotels(DataContext dataContext)
         {
             var hotels = dataContext.Set<Hotel>();
 
-            if (await hotels.AnyAsync())
+            if (!await hotels.AnyAsync())
             {
-                return;
+                var demoHotels = new List<Hotel>
+                {
+                    new Hotel { Name = "Enstay 1", Address = "225 Baronne St, New Orleans, LA 70112" },
+                    new Hotel { Name = "Enstay 2", Address = "405 Esplanade Ave, New Orleans, LA 70116" },
+                    new Hotel { Name = "Enstay 3", Address = "200 Convention St, Baton Rouge, LA 70801" }
+                };
+
+                await hotels.AddRangeAsync(demoHotels);
             }
-
-
-            dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Enstay 1",
-                    Address = "225 Baronne St, New Orleans, LA 70112"
-                });
-
-            dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Enstay 2",
-                    Address = "405 Esplanade Ave, New Orleans, LA 70116"
-                });
-
-
-            dataContext.Set<Hotel>()
-                .Add(new Hotel
-                {
-                    Name = "Enstay 3",
-                    Address = "200 Convention St, Baton Rouge, LA 70801"
-                });
 
             await dataContext.SaveChangesAsync();
         }
@@ -117,19 +95,18 @@ namespace Selu383.SP24.Api.Data
         {
             var roomTypes = dataContext.Set<RoomType>();
 
-            if (await roomTypes.AnyAsync())
+            if (!await roomTypes.AnyAsync())
             {
-                return;
+                var demoRoomTypes = new List<RoomType>
+                {
+                    new RoomType { Name = "Double Twin", NumberOfBeds = 2},
+                    new RoomType { Name = "Double Queen", NumberOfBeds = 2},
+                    new RoomType { Name = "Single King", NumberOfBeds = 1}
+                };
+
+                await roomTypes.AddRangeAsync(demoRoomTypes);
             }
 
-            var predefinedRooms = new List<RoomType>
-            {
-                new RoomType { Name = "Double Twin", NumberOfBeds = 2},
-                new RoomType { Name = "Double Queen", NumberOfBeds = 2},
-                new RoomType { Name = "Single King", NumberOfBeds = 1}
-            };
-
-            await roomTypes.AddRangeAsync(predefinedRooms);
             await dataContext.SaveChangesAsync();
         }
 
@@ -139,36 +116,34 @@ namespace Selu383.SP24.Api.Data
             var hotels = await dataContext.Set<Hotel>().ToListAsync();
             var roomTypes = await dataContext.Set<RoomType>().ToListAsync();
 
-            if (await rooms.AnyAsync())
+            if (!await rooms.AnyAsync())
             {
-                return;
-            }
+                var demoRooms = new List<Room>();
 
-            foreach (var hotel in hotels)
-            {
-                for (int floor = 1; floor <= 6; floor++)
+                foreach (var hotel in hotels)
                 {
-                    int roomCount = 0;
-                    int roomTypeIndex = 0; 
-                    while (roomCount < 20)
+                    for (int floor = 1; floor <= 6; floor++)
                     {
-                        var roomType = roomTypes[roomTypeIndex];
-                        rooms.Add(new Room
+                        foreach (var roomType in roomTypes)
                         {
-                            Beds = roomType.Name,
-                            IsAvailable = true,
-                            HotelId = hotel.Id,
-                            RoomType = roomType,
-                            FloorNumber = floor 
-                        });
-
-                        roomCount++;
-                        roomTypeIndex = (roomTypeIndex + 1) % roomTypes.Count; 
+                            for (int i = 0; i < 20; i++)
+                            {
+                                demoRooms.Add(new Room
+                                {
+                                    Beds = roomType.Name,
+                                    IsAvailable = true,
+                                    HotelId = hotel.Id,
+                                    RoomType = roomType,
+                                    FloorNumber = floor
+                                });
+                            }
+                        }
                     }
                 }
-            }
 
-            await dataContext.SaveChangesAsync();
+                await rooms.AddRangeAsync(demoRooms);
+                await dataContext.SaveChangesAsync();
+            }
         }
 
 
@@ -177,44 +152,44 @@ namespace Selu383.SP24.Api.Data
         {
             var reservations = dataContext.Set<Reservation>();
 
-            if (await reservations.AnyAsync())
+            if (!await reservations.AnyAsync())
             {
-                return;
-            }
+                var rooms = await dataContext.Set<Room>()
+                    .Include(r => r.Hotel)
+                    .ToListAsync();
 
-            var rooms = await dataContext.Set<Room>()
-                .Include(r => r.Hotel)
-                .ToListAsync();
+                var demoUser = await userManager.FindByNameAsync("sue");
+                var random = new Random();
 
-            var testUser = await userManager.FindByNameAsync("sue");
-            var random = new Random();
+                var demoReservations = new List<Reservation>();
 
-            foreach (var hotel in rooms.Select(r => r.Hotel).Distinct())
-            {
-                var hotelRooms = rooms.Where(r => r.HotelId == hotel.Id).ToList();
-
-                for (int i = 0; i < 20; i++)
+                foreach (var hotel in rooms.Select(r => r.Hotel).Distinct())
                 {
-                    var room = hotelRooms[random.Next(hotelRooms.Count)];
+                    var hotelRooms = rooms.Where(r => r.HotelId == hotel.Id).ToList();
 
-                    var reservation = new Reservation
+                    for (int i = 0; i < 20; i++)
                     {
-                        CheckIn = DateTime.Today,
-                        CheckOut = new DateTime(2024, 5, 20),
-                        ReservationNumber = GenerateReservationNumber(),
-                        RoomId = room.Id,
-                        UserId = testUser.Id
-                    };
+                        var room = hotelRooms[random.Next(hotelRooms.Count)];
 
-                    reservations.Add(reservation);
+                        var reservation = new Reservation
+                        {
+                            CheckIn = DateTime.Today,
+                            CheckOut = new DateTime(2024, 5, 20),
+                            ReservationNumber = GenerateReservationNumber(),
+                            RoomId = room.Id,
+                            UserId = demoUser.Id
+                        };
 
-                    // Update room availability
-                    room.IsAvailable = false;
+                        demoReservations.Add(reservation);
+
+                        // Update room availability
+                        room.IsAvailable = false;
+                    }
                 }
-            }
 
-            // Save changes to database
-            await dataContext.SaveChangesAsync();
+                reservations.AddRange(demoReservations);
+                await dataContext.SaveChangesAsync();
+            }
         }
 
         // Method to generate a random reservation number
