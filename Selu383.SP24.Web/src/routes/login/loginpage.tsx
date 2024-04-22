@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import './loginpage.css'; // Import CSS file for styling
-import Navbar from '../../components/Navbar';
 
 const Login: React.FC = () => {
   // State variables to store form input values
@@ -48,9 +47,6 @@ const Login: React.FC = () => {
 
   return (
       <div>
-        <div className="navbar">
-        <Navbar/>
-        </div>
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">Enstay</Link>
