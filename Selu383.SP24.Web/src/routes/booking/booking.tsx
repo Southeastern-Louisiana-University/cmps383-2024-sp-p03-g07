@@ -10,19 +10,19 @@ import { useLocation } from 'react-router-dom';
 import { ReservationDto } from '../../features/reservations/ReservationDto';
 import Navbar from '../../components/Navbar';
 
-export default function BookingNO() {
+export default function Booking() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const checkInParam = params.get('checkIn');
     const checkOutParam = params.get('checkOut');
-
+    const hotelIdParam = params.get('hotelId');
+    
     const [checkIn, setCheckIn] = useState<Date | null>(checkInParam ? new Date(checkInParam) : null);
     const [checkOut, setCheckOut] = useState<Date | null>(checkOutParam ? new Date(checkOutParam) : null);
     const [availableRooms, setAvailableRooms] = useState<RoomDto[]>([]);
     const [selectedRooms, setSelectedRooms] = useState<{ room: RoomDto, quantity: number }[]>([]);
     const [cartOpen, setCartOpen] = useState(false);
-
-    const hotelId = 1;
+    const [selectedHotelId] = useState<number | null>(hotelIdParam ? parseInt(hotelIdParam, 10) : null);
 
     const handleCheckInChange = (date: Date | null) => {
         setCheckIn(date);
@@ -35,12 +35,16 @@ export default function BookingNO() {
     useEffect(() => {
         const fetchAvailableRoomsAndReservations = async () => {
             try {
-                if (!checkIn || !checkOut) return;
+                if (!checkIn || !checkOut || !selectedHotelId) return;
 
                 const [availableRoomsResponse, reservationsResponse] = await Promise.all([
-                    fetch(`/api/rooms/byhotel/${hotelId}`),
+                    fetch(`/api/rooms/byhotel/${selectedHotelId}`),
                     fetch(`/api/reservations?checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}`)
                 ]);
+
+                if (!availableRoomsResponse.ok || !reservationsResponse.ok) {
+                    throw new Error('Failed to fetch data');
+                }
 
                 const [availableRoomsData, reservationsData]: [RoomDto[], ReservationDto[]] = await Promise.all([
                     availableRoomsResponse.json(),
@@ -48,8 +52,7 @@ export default function BookingNO() {
                 ]);
 
                 const filteredRooms = availableRoomsData.filter(room => {
-                    // Check if room has reservations conflicting with the given check-in and check-out times
-                    return !reservationsData.some(reservation =>
+                    return room.isAvailable && !reservationsData.some(reservation =>
                         reservation.roomId === room.id &&
                         ((new Date(reservation.checkIn) < checkOut && new Date(reservation.checkOut) > checkIn) ||
                         (new Date(reservation.checkIn) >= checkIn && new Date(reservation.checkIn) < checkOut)));
@@ -62,7 +65,7 @@ export default function BookingNO() {
         };
 
         fetchAvailableRoomsAndReservations();
-    }, [checkIn, checkOut]);
+    }, [checkIn, checkOut, selectedHotelId]);
 
     const handleRoomSelect = (room: RoomDto) => {
         const existingRoomIndex = selectedRooms.findIndex(selectedRoom => selectedRoom.room.id === room.id);

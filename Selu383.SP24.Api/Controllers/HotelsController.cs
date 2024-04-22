@@ -50,6 +50,8 @@ public class HotelsController : ControllerBase
         return Ok(result);
     }
 
+    
+
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin)]
     public ActionResult<HotelDto> CreateHotel(HotelDto dto)
