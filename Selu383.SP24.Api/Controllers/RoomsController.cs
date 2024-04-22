@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Data;
+using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
 
 namespace Selu383.SP24.Api.Controllers
@@ -11,6 +12,7 @@ namespace Selu383.SP24.Api.Controllers
     {
         private readonly DbSet<Room> rooms;
         private readonly DataContext dataContext;
+        private readonly DbSet<Hotel> hotels;
 
         public RoomsController(DataContext dataContext)
         {
@@ -48,6 +50,9 @@ namespace Selu383.SP24.Api.Controllers
 
             return Ok(GetRoomDtos(hotelRooms));
         }
+      
+
+
 
         private IQueryable<RoomDto> GetRoomDtos(IQueryable<Room> rooms)
         {
