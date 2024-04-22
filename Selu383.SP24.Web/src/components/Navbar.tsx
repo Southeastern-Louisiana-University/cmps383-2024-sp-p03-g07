@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
+    // Fetch the logged-in username from the local storage
+    const loggedInUsername = localStorage.getItem('username');
+
     return (
         <>
             <link
@@ -26,6 +29,9 @@ export default function Navbar() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div className="navbar-nav ms-auto">
+                            {loggedInUsername && (
+                                <span className="nav-item nav-link">Hello, {loggedInUsername}</span>
+                            )}
                             <Link className="nav-item nav-link" to="/login">Login</Link>
                             <Link className="nav-item nav-link" to="/signup">Sign-Up</Link>
                         </div>
