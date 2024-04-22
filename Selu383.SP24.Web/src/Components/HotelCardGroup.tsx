@@ -1,72 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardGroup, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Import Link from React Router
+import { Link } from 'react-router-dom';
+import { HotelDto } from "../features/hotels/HotelDto";
 import hotelImage1 from '../assets/hotel1.jpg'; // Import the first image
 import hotelImage2 from '../assets/hotel2.jpg'; // Import the second image
 import hotelImage3 from '../assets/hotel3.jpg'; // Import the third image
 
 const imageStyle: React.CSSProperties = {
-  height: '500px', // Set the desired height for the images
-  objectFit: 'cover', // Ensure the images cover the entire space
+  height: '500px',
+  objectFit: 'cover',
   borderRadius: '10px',
 };
 
 const titleStyle: React.CSSProperties = {
-  textAlign: 'center', // Center the title text
-  fontSize: '2rem', // Increase font size
+  textAlign: 'center',
+  fontSize: '2rem',
   marginTop: '20px',
-  marginBottom: '20px', // Add space below the title
+  marginBottom: '20px',
 };
 
 const buttonStyle: React.CSSProperties = {
-  marginTop: '10px', // Add margin to separate button from text
+  marginTop: '10px',
 };
 
 function HotelCardGroup() {
+  const [hotels, setHotels] = useState<{ hotel: HotelDto, address: string }[]>([]);
+  useEffect(() => {
+    async function fetchHotels() {
+        try {
+            const response = await fetch("/api/hotels");
+            const hotelData: HotelDto[] = await response.json();
+            const hotelAddresses = await Promise.all(hotelData.map(async (hotel) => {
+              const response = await fetch(`/api/hotels/address/${encodeURIComponent(hotel.address)}`);
+              const data = await response.json();
+              return { hotel: hotel, address: data.address };
+            }));
+            setHotels(hotelAddresses);
+        } catch (error) {
+            console.error('Error fetching hotels:', error);
+        }
+    }
+    fetchHotels();
+  }, []);
+
   return (
     <div>
       <h2 style={titleStyle}>Our Hotels</h2>
       <CardGroup>
-        <Card>
-          <Card.Img variant="top" src={hotelImage1} style={imageStyle} />
-          <Card.Body>
-            <Card.Title style={titleStyle}>Enstay New Orleans</Card.Title>
-            <Card.Text>
-              Located in the heart of New Orleans, this Enstay location offers quick access to the city's attractions. 
-              Whether you're visiting for business or pleasure, our comfortable accommodations and friendly staff will make your stay unforgettable.
-              Also, try the best seafood around at our 5 star restaurant right here in the hotel.
-            </Card.Text>
-            <Link to="/bookingNO"> {/* Link to the booking page */}
-              <Button variant="primary" style={buttonStyle}>Book now</Button> {/* Button to book now */}
-            </Link>
-          </Card.Body>
-        </Card>
-        <Card>
-          <Card.Img variant="top" src={hotelImage2} style={imageStyle} />
-          <Card.Body>
-            <Card.Title style={titleStyle}>Enstay Baton Rouge</Card.Title>
-            <Card.Text>
-              Located in the vibrant city of Baton Rouge, our Enstay hotel offers modern amenities and convenient access to local attractions.
-              Whether you're here for a weekend getaway or an extended stay, our comfortable rooms and exceptional service ensure a memorable experience.
-            </Card.Text>
-            <Link to="/bookingBR"> {/* Link to the booking page */}
-              <Button variant="primary" style={buttonStyle}>Book now</Button> {/* Button to book now */}
-            </Link>
-          </Card.Body>
-        </Card>
-        <Card>
-          <Card.Img variant="top" src={hotelImage3} style={imageStyle} />
-          <Card.Body>
-            <Card.Title style={titleStyle}>Enstay Lake Charles</Card.Title>
-            <Card.Text>
-              Welcome to Enstay Lake Charles, where comfort meets convenience. Our hotel is ideally situated near popular attractions and business destinations,
-              making it the perfect choice for both leisure and business travelers. Enjoy modern amenities, spacious accommodations, and personalized service throughout your stay.
-            </Card.Text>
-            <Link to="/booking"> {/* Link to the booking page */}
-              <Button variant="primary" style={buttonStyle}>Book now</Button> {/* Button to book now */}
-            </Link>
-          </Card.Body>
-        </Card>
+        {hotels.map((hotel, index) => (
+          <Card key={index}>
+            <Card.Img variant="top" src={index === 0 ? hotelImage1 : index === 1 ? hotelImage2 : hotelImage3} style={imageStyle} />
+            <Card.Body>
+              <Card.Title style={titleStyle}>{hotel.address}</Card.Title>
+              
+              <Link to={`/booking?hotelId=${hotel.hotel.id}`}>
+                <Button variant="primary" style={buttonStyle}>Book now</Button>
+              </Link>
+            </Card.Body>
+          </Card>
+        ))}
       </CardGroup>
     </div>
   );
