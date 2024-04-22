@@ -50,7 +50,19 @@ public class HotelsController : ControllerBase
         return Ok(result);
     }
 
-    
+    [HttpGet]
+    [Route("address/{address}")]
+    public ActionResult<HotelDto> GetHotelByAddress(string address)
+    {
+        var result = GetHotelDtos(hotels.Where(x => x.Address == address)).FirstOrDefault();
+        if (result == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
 
     [HttpPost]
     [Authorize(Roles = RoleNames.Admin)]
