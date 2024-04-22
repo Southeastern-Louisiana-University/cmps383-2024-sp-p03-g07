@@ -9,6 +9,7 @@ import Login from "./routes/login/loginpage";
 import Reservation from "./routes/reservation/reservation";
 import { CachePolicies, Provider } from "use-http";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SignUp from "./routes/signup/signpage";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
   { path: "/bookingBR", element: <BookingBR/> },
   { path: "/bookingLC", element: <BookingLC/> },
   {path:"/login",element:<Login/>},
+  {path:"/signup",element:<SignUp/>},
   {path:"/reservation",element:<Reservation/>},
 ]);
 
