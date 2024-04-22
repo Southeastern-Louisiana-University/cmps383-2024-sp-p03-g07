@@ -4,8 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-image: url('https://wallpapers.com/images/high/elegant-and-luxurious-hotel-suite-interior-65jrbhrszibou187.webp');
-    background-size: auto;
+    background-color: #fcd34d;
   }
   
   
@@ -45,5 +44,5 @@
     text-decoration: underline;
   }
   .perimeter-text {
-    color: white;
+    color: black;
   }
