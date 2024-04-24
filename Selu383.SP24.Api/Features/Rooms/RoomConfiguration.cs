@@ -15,8 +15,11 @@ namespace Selu383.SP24.Api.Features.Rooms
             builder.Property(x => x.IsAvailable)
                 .IsRequired();
 
-            builder.Property(x => x.FloorNumber) 
-                .IsRequired(); 
+            builder.Property(x => x.FloorNumber)
+                .IsRequired();
+
+            builder.Property(x => x.RoomNumber) 
+                .IsRequired();
 
             builder.HasKey(x => x.Id);
 

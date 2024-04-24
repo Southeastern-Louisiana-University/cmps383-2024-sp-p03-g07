@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const LoginScreen = () => {
+const RoomKeyScreen = () => {
     return (
       <View style={styles.screenContainer}>
-        <Text>Login Screen</Text>
+        <Text>Room QR code</Text>
       </View>
     );
   };
@@ -18,7 +18,7 @@ const LoginScreen = () => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-  
+
     },
   });
-  export default LoginScreen;
+  export default RoomKeyScreen;

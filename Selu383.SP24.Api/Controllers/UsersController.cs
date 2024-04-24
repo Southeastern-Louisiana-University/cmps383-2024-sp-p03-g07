@@ -54,4 +54,24 @@ public class UsersController : ControllerBase
             UserName = newUser.UserName,
         });
     }
+    [HttpGet("{username}/id")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> GetUserByUsername(string username)
+    {
+        var user = await userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var userDto = new UserDto
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            
+        };
+
+        return Ok(userDto);
+    }
+
 }

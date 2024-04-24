@@ -123,7 +123,6 @@ namespace Selu383.SP24.Api.Data
         }
 
 
-
         private static async Task AddRooms(DataContext dataContext)
         {
             var rooms = dataContext.Set<Room>();
@@ -134,15 +133,15 @@ namespace Selu383.SP24.Api.Data
 
             foreach (var hotel in hotels)
             {
-                int roomTypeIndex = 0;
-
                 for (int floor = 1; floor <= 6; floor++)
                 {
+                    int roomNumber = floor * 100 + 1; 
+
                     var shuffledRoomTypes = roomTypes.OrderBy(x => Guid.NewGuid()).ToList();
 
                     for (int i = 0; i < 20; i++)
                     {
-                        var roomType = shuffledRoomTypes[roomTypeIndex % shuffledRoomTypes.Count];
+                        var roomType = shuffledRoomTypes[i % shuffledRoomTypes.Count];
 
                         var existingRoom = await rooms.FirstOrDefaultAsync(r => r.HotelId == hotel.Id && r.Beds == roomType.Name && r.FloorNumber == floor);
                         if (existingRoom != null)
@@ -156,10 +155,11 @@ namespace Selu383.SP24.Api.Data
                             IsAvailable = true,
                             HotelId = hotel.Id,
                             RoomType = roomType,
-                            FloorNumber = floor
+                            FloorNumber = floor,
+                            RoomNumber = roomNumber
                         });
 
-                        roomTypeIndex++;
+                        roomNumber++; 
                     }
                 }
             }
@@ -167,6 +167,7 @@ namespace Selu383.SP24.Api.Data
             await rooms.AddRangeAsync(demoRooms);
             await dataContext.SaveChangesAsync();
         }
+
 
 
 
@@ -183,28 +184,27 @@ namespace Selu383.SP24.Api.Data
 
             foreach (var hotel in hotels)
             {
-                // Retrieve all reservations for this hotel
+           
                 var hotelReservations = await reservations
-                    .Where(r => r.Room.HotelId == hotel.Id)
+                    .Where(r => r.Room.HotelId == hotel.Id && r.UserId == demoUser.Id)
                     .ToListAsync();
 
-                // Remove references in Reservation table for this hotel
+            
                 reservations.RemoveRange(hotelReservations);
 
-                // Update room availability in-memory before adding new reservations
                 foreach (var room in hotel.Rooms)
                 {
-                    room.IsAvailable = true; // Reset availability
+                    room.IsAvailable = true; 
                 }
 
-                // Save changes to update room availability
+         
                 await dataContext.SaveChangesAsync();
 
-                // Proceed with adding new reservations
+               
                 var availableRooms = hotel.Rooms.Where(r => r.IsAvailable).ToList();
 
-                // Limit reservations to 20 or available rooms count, whichever is smaller
-                var reservationCount = Math.Min(20, availableRooms.Count);
+               
+                var reservationCount = Math.Min(5, availableRooms.Count);
 
                 for (int i = 0; i < reservationCount; i++)
                 {
@@ -214,7 +214,7 @@ namespace Selu383.SP24.Api.Data
                     var reservation = new Reservation
                     {
                         CheckIn = DateTime.Today,
-                        CheckOut = DateTime.Today.AddDays(30), // Assuming 30 days stay
+                        CheckOut = DateTime.Today.AddDays(30), 
                         ReservationNumber = GenerateReservationNumber(random),
                         RoomId = room.Id,
                         UserId = demoUser.Id
@@ -222,7 +222,7 @@ namespace Selu383.SP24.Api.Data
 
                     reservations.Add(reservation);
 
-                    // Update room availability
+                 
                     room.IsAvailable = false;
                     availableRooms.RemoveAt(randomRoomIndex);
                 }

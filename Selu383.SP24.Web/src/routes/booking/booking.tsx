@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -23,14 +23,6 @@ export default function Booking() {
     const [selectedRooms, setSelectedRooms] = useState<{ room: RoomDto, quantity: number }[]>([]);
     const [cartOpen, setCartOpen] = useState(false);
     const [selectedHotelId] = useState<number | null>(hotelIdParam ? parseInt(hotelIdParam, 10) : null);
-
-    const handleCheckInChange = (date: Date | null) => {
-        setCheckIn(date);
-    };
-
-    const handleCheckOutChange = (date: Date | null) => {
-        setCheckOut(date);
-    };
 
     useEffect(() => {
         const fetchAvailableRoomsAndReservations = async () => {
@@ -96,6 +88,14 @@ export default function Booking() {
         } 
     };
 
+    const handleReservation = () => {
+            const reservationURL = `/reservation?selectedRooms=${JSON.stringify(selectedRooms)}&checkIn=${checkIn?.toISOString()}&checkOut=${checkOut?.toISOString()}`;
+       
+            window.location.href = reservationURL;
+       
+    };
+    
+
     return (
         <div>
             <link
@@ -105,7 +105,7 @@ export default function Booking() {
                 crossOrigin="anonymous"
             ></link>
             <div className="navbar">
-                <Navbar/>
+                <Navbar  />
             </div>
             <div>
                 <Button variant="info" size="sm" className="mt-5" onClick={() => setCartOpen(!cartOpen)}> Reservations ({selectedRooms.reduce((acc, curr) => acc + curr.quantity, 0)})</Button>
@@ -118,8 +118,7 @@ export default function Booking() {
                                     <Card.Body>
                                         <Card.Title>{selectedRoom.room.beds}</Card.Title>
                                         <Card.Text>
-                                            Room ID: {selectedRoom.room.id}<br />
-                                            Available: {selectedRoom.room.isAvailable ? 'Yes' : 'No'}<br />
+                                            Floor: {selectedRoom.room.roomNumber}<br />  
                                             Price: ${selectedRoom.room.price} per night
                                         </Card.Text>
                                         <Button variant="danger" size="sm" onClick={() => handleRemoveFromCart(index)}>Remove</Button>
@@ -130,9 +129,7 @@ export default function Booking() {
                     </div>
                 )}
                 
-                <Button variant="success" size="lg" className="mt-3" onClick={() => {
-                window.location.href = `/reservation?selectedRooms=${JSON.stringify(selectedRooms)}&checkIn=${checkIn?.toISOString()}&checkOut=${checkOut?.toISOString()}`;
-                }}>Go to Reservation</Button>
+                <Button variant="success" size="lg" className="mt-3" onClick={handleReservation}>Go to Reservation</Button>
 
                 <h2>Select Dates:</h2>
                 <form>
@@ -141,7 +138,7 @@ export default function Booking() {
                         <DatePicker
                             id="checkIn"
                             selected={checkIn}
-                            onChange={handleCheckInChange}
+                            onChange={(date) => setCheckIn(date)}
                             dateFormat="MM/dd/yyyy"
                             minDate={new Date()}
                             className="form-control"
@@ -153,7 +150,7 @@ export default function Booking() {
                         <DatePicker
                             id="checkOut"
                             selected={checkOut}
-                            onChange={handleCheckOutChange}
+                            onChange={(date) => setCheckOut(date)}
                             dateFormat="MM/dd/yyyy"
                             minDate={checkIn || new Date()}
                             className="form-control"
@@ -176,11 +173,10 @@ export default function Booking() {
                                             <Card.Body>
                                                 <Card.Title>{room.beds}</Card.Title>
                                                 <Card.Text>
-                                                    Floor: {room.floorNumber}<br />
-                                                    Available: {room.isAvailable ? 'Yes' : 'No'}<br />
+                                                    Room : {room.roomNumber}<br />
                                                     Price: ${room.price} per night
                                                 </Card.Text>
-                                                <Button variant="primary" onClick={() => handleRoomSelect(room)}>Select</Button>
+                                                <Button variant="primary" onClick={() => handleRoomSelect(room)}>Book</Button>
                                             </Card.Body>
                                         </Card>
                                     </div>

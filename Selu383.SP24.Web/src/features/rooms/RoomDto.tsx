@@ -5,5 +5,6 @@ export interface RoomDto {
     hotelName?: string | null;
     isAvailable: boolean;
     floorNumber: number;
+    roomNumber: number;
     price: number;
 }

@@ -13,7 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
-      "**/*"
+      "*/"
     ],
     "ios": {
       "supportsTablet": true
@@ -29,12 +29,11 @@
       "favicon": "./assets/favicon.png"
     },
  
-    "owner": "kade.snyder",
-    "plugins": [
-      "expo-router"
-    ]
-  },
-  "plugins": [
-    "expo-router"
-  ]
+    "extra": {
+      "eas": {
+        "projectId": "ad6bd4e0-31ba-4621-b19f-3c6becb0f960"
+      }
+    },
+    "owner": "lillaundry"
+  }
 }

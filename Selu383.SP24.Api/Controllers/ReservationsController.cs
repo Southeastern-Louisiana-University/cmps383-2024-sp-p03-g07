@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Data;
 using Selu383.SP24.Api.Features.Reservations;
+using Selu383.SP24.Api.Features.Rooms;
 
 namespace Selu383.SP24.Api.Controllers
 {
@@ -63,7 +64,11 @@ namespace Selu383.SP24.Api.Controllers
         [HttpGet("user/{userId}")]
         public IActionResult GetReservationsByUserId(int userId)
         {
-            var userReservations = reservations.Where(x => x.UserId == userId).ToList();
+            var userReservations = reservations
+                .Include(r => r.Room) 
+                .Where(x => x.UserId == userId)
+                .ToList();
+
             if (userReservations.Count == 0)
             {
                 return NotFound("No reservations found for the user.");
@@ -78,6 +83,12 @@ namespace Selu383.SP24.Api.Controllers
                 RoomId = x.RoomId,
                 HotelName = x.HotelName,
                 UserId = x.UserId,
+                Room = new RoomDto 
+                {
+                  
+                    Id = x.Room.Id,
+                  
+                }
             });
 
             return Ok(reservationDtos);

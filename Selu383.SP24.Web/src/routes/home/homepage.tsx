@@ -38,12 +38,12 @@ export default function Home() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Check if a hotel is selected and dates are entered
+
         if (selectedHotel !== "" && checkIn && checkOut) {
             const selectedHotelObject = hotels.find(hotel => hotel.id === selectedHotel);
             if (selectedHotelObject) {
                 const id = selectedHotelObject.id;
-                setHotelId(id); // Set hotelId in state
+                setHotelId(id); 
                 const url = `/booking?hotelId=${id}&checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}`;
                 window.location.href = url;
             } else {

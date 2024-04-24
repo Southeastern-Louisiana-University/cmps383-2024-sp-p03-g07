@@ -1,3 +1,5 @@
+import { RoomDto } from "../rooms/RoomDto";
+
 export interface ReservationDto {
     id: number;
     checkIn: Date;
@@ -6,4 +8,5 @@ export interface ReservationDto {
     hotelName?: string | null;
     roomId: number;
     userId: number;
+    room?: RoomDto; 
 }
