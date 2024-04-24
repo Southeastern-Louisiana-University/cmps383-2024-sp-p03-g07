@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Selu383.SP24.Api.Data;
 using Selu383.SP24.Api.Features.Hotels;
 using Selu383.SP24.Api.Features.Rooms;
+using System.Linq;
 
 namespace Selu383.SP24.Api.Controllers
 {
@@ -18,6 +19,7 @@ namespace Selu383.SP24.Api.Controllers
         {
             this.dataContext = dataContext;
             rooms = dataContext.Set<Room>();
+            hotels = dataContext.Set<Hotel>();
         }
 
         [HttpGet]
@@ -26,8 +28,7 @@ namespace Selu383.SP24.Api.Controllers
             return GetRoomDtos(rooms);
         }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public ActionResult<RoomDto> GetRoomById(int id)
         {
             var result = GetRoomDtos(rooms.Where(x => x.Id == id)).FirstOrDefault();
@@ -50,9 +51,6 @@ namespace Selu383.SP24.Api.Controllers
 
             return Ok(GetRoomDtos(hotelRooms));
         }
-      
-
-
 
         private IQueryable<RoomDto> GetRoomDtos(IQueryable<Room> rooms)
         {
@@ -66,9 +64,9 @@ namespace Selu383.SP24.Api.Controllers
                     HotelId = x.HotelId,
                     HotelName = x.Hotel.Name,
                     FloorNumber = x.FloorNumber,
-                    Price = x.RoomType.Price
+                    Price = x.RoomType.Price,
+                    RoomNumber = x.RoomNumber 
                 });
         }
-
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Selu383.SP24.Api.Features.Reservations
+﻿using Selu383.SP24.Api.Features.Rooms;
+using System;
+
+namespace Selu383.SP24.Api.Features.Reservations
 {
     public class ReservationDto
     {
@@ -9,5 +12,6 @@
         public string? HotelName { get; set; }
         public int RoomId { get; set; }
         public int UserId { get; set; }
+        public RoomDto? Room { get; set; } 
     }
 }

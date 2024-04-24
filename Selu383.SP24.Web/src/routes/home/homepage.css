@@ -1,28 +1,49 @@
+/* Custom CSS for StayDetails component */
+
+/* Set black background for the page */
 .home-container {
   display: flex;
-  flex-direction: column; /* Align children vertically */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
 
+/* Style for the title */
 h1 {
-  position: "absolute", top "50px" ;
+  color: #fff; /* White text color */
+  margin-top: 50px; /* Adjusted top margin */
 }
 
+/* Style for the hotel form */
 .hotel-form {
-  background-color: rgba(0, 0, 0, 0.5);
   padding: 20px;
   border-radius: 10px;
-  max-width: 400px; /* Adjust width as needed */
-  width: 90%; /* To keep the form responsive */
-  text-align: center; /* Center align form contents */
-  font-family: 'Roboto', sans-serif; /* Use a different font */
-  margin-top: -360px; /* Add margin from the top */
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  margin-top: -300px;
 }
 
-.hotel-card{
-  margin-top:-400px;
+/* Add more padding between form fields */
+.hotel-form input,
+.hotel-form select {
+  margin-bottom: 15px;
+  background-color: #fcd34d; /* Set background color same as button */
+  border-color: #fcd34d; /* Set border color same as button */
+  color: #000; /* Set text color */
 }
 
+/* Style for the hotel card */
+.hotel-card {
+  margin-top: -400px;
+  box-shadow: none; /* Remove box shadow */
+}
 
+/* Style for the button */
+.btn {
+  background-color: #fcd34d !important; /* Set button color */
+  border-color: #fcd34d !important; /* Set button border color */
+  color: #000 !important; /* Set button text color */
+}

@@ -1,69 +1,114 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { ReservationDto } from '../../features/reservations/ReservationDto'; // Assuming the correct path to ReservationDto
+import { ReservationDto } from '../../features/reservations/ReservationDto';
 import Navbar from '../../components/Navbar';
 
 const StayDetails = () => {
-    const { reservationNumber } = useParams<{ reservationNumber: string }>();
-    const [reservationDetails, setReservationDetails] = useState<ReservationDto | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [reservations, setReservations] = useState<ReservationDto[]>([]);
+    const [loggedInUserId, setLoggedInUserId] = useState<number>(0);
 
     useEffect(() => {
-        const fetchReservationDetails = async () => {
+        async function fetchUserId() {
             try {
-                const response = await fetch(`/api/reservations/${reservationNumber}`);
+                const response = await fetch('/api/authentication/me');
                 if (response.ok) {
-                    const data = await response.json();
-                    setReservationDetails(data);
+                    const userData = await response.json();
+                    if (userData && userData.id) {
+                        const userId = parseInt(userData.id, 10); // Parse the ID as an integer
+                        if (!isNaN(userId)) {
+                            setLoggedInUserId(userId); // Set the state variable here
+                            console.log('Logged in user ID:', userId);
+                        } else {
+                            console.error('Invalid user ID:', userData.id);
+                        }
+                    }
                 } else {
-                    console.error('Failed to fetch reservation details');
+                    console.error('Failed to fetch user ID');
                 }
             } catch (error) {
-                console.error('Error fetching reservation details:', error);
-            } finally {
-                setLoading(false);
+                console.error('Error fetching user ID:', error);
             }
-        };
+        }
+        fetchUserId();
+    }, []);
 
-        fetchReservationDetails();
-    }, [reservationNumber]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!reservationDetails) {
-        return <div>Error: Unable to fetch reservation details</div>;
-    }
+    const fetchReservations = async () => {
+        try {
+            const response = await fetch(`/api/reservations/user/${loggedInUserId}`);
+            if (response.ok) {
+                const reservationsData = await response.json();
+    
+                // Filter out duplicate reservations based on room number
+                const uniqueReservations: ReservationDto[] = [];
+                const seenRoomNumbers: Set<string> = new Set();
+    
+                for (const reservation of reservationsData) {
+                    if (!seenRoomNumbers.has(reservation.roomId.toString())) {
+                        uniqueReservations.push(reservation);
+                        seenRoomNumbers.add(reservation.roomId.toString());
+                    }
+                }
+    
+                // Fetch room details for unique reservations
+                const reservationsWithRoomDetails = await Promise.all(uniqueReservations.map(async (reservation: ReservationDto) => {
+                    try {
+                        const roomResponse = await fetch(`/api/rooms/${reservation.roomId}`);
+                        if (roomResponse.ok) {
+                            const roomData = await roomResponse.json();
+                            return { ...reservation, room: roomData };
+                        } else {
+                            console.error(`Failed to fetch room details for reservation ID ${reservation.id}`);
+                            return reservation; // Return reservation without room details
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching room details for reservation ID ${reservation.id}:`, error);
+                        return reservation; // Return reservation without room details
+                    }
+                }));
+    
+                setReservations(reservationsWithRoomDetails);
+            } else {
+                console.error('Failed to fetch reservations');
+            }
+        } catch (error) {
+            console.error('Error fetching reservations:', error);
+        }
+    };
+    
+    useEffect(() => {
+        if (loggedInUserId) {
+            fetchReservations();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loggedInUserId]);
 
     return (
         <Container>
-            <link
-                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-                rel="stylesheet"
-                integrity="<KEY>"
-                crossOrigin="anonymous"
-            ></link>
             <div className="navbar">
-                <Navbar/>
+                <Navbar />
             </div>
-            <h1>Stay Details</h1>
-            <Row>
-                <Col>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Reservation Details</Card.Title>
-                            <Card.Text>
-                                <p>Reservation ID: {reservationDetails.id}</p>
-                                <p>Check-in Date: {reservationDetails.checkIn.toLocaleDateString()}</p>
-                                <p>Check-out Date: {reservationDetails.checkOut.toLocaleDateString()}</p>
+            <h1 className="mt-5">Stay Details</h1>
+            <Row xs={1} md={2} lg={3}>
+                {reservations.map((reservation: ReservationDto) => (
+                    <Col key={reservation.id} className="mb-4">
+                        <Card>
+                            <Card.Body>
+                                <Card.Title className="mb-3">Reservation </Card.Title>
+                                <Card.Text>
+                                    <p className="mb-1">Check-in Date: {new Date(reservation.checkIn).toLocaleDateString()}</p>
+                                    <p className="mb-3">Check-out Date: {new Date(reservation.checkOut).toLocaleDateString()}</p>
 
-                                {/* Add more reservation details as needed */}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
+                                    {reservation.room && (
+                                        <>
+                                            <p className="mb-1">Room: {reservation.room.roomNumber}</p>
+                                            <p className="mb-1">Beds: {reservation.room.beds}</p>
+                                        </>
+                                    )}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
             </Row>
         </Container>
     );

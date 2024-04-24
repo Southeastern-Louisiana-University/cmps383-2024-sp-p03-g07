@@ -36,7 +36,10 @@ const SignUp: React.FC = () => {
     });
 
     if (response.ok) {
+      const data = await response.json(); // Parse response data
       console.log('Signup successful!');
+      localStorage.setItem('username', username);
+      localStorage.setItem('userId', data.userId); // Store the user ID in local storage
     } else {
       console.log('Failed to Signup!');
     }

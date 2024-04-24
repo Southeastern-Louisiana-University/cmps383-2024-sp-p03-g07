@@ -1,17 +1,102 @@
-import { useLocation } from 'react-router-dom';
-import { Card, Col, Container, Row, Button, } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Card, Col, Container, Row, Button, Form } from 'react-bootstrap';
 import twins from '../../assets/twins.jpg';
 import queen from '../../assets/queens.jpg';
 import king from '../../assets/king.jpg';
 import { RoomDto } from '../../features/rooms/RoomDto';
 import Navbar from '../../components/Navbar';
+import { useLocation } from 'react-router-dom';
 
-export default function Reservation() {
+const Reservation: React.FC = () => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const selectedRooms: { room: RoomDto, quantity: number }[] = JSON.parse(params.get('selectedRooms') || '[]');
     const checkIn = new Date(params.get('checkIn')!);
     const checkOut = new Date(params.get('checkOut')!);
+    const [loggedInUserId, setLoggedInUserId] = useState<number>();
+    const [cardDetails, setCardDetails] = useState({
+        cardNumber: '',
+        expiryDate: '',
+        cvv: ''
+    });
+    const [isCardValid, setIsCardValid] = useState(false);
+
+    useEffect(() => {
+        async function fetchUserId() {
+            try {
+                const response = await fetch('/api/authentication/me');
+                if (response.ok) {
+                    const userData = await response.json();
+                    if (userData && userData.id) {
+                        const userId = parseInt(userData.id, 10);
+                        if (!isNaN(userId)) {
+                            setLoggedInUserId(userId);
+                            console.log('Logged in user ID:', userId);
+                        } else {
+                            console.error('Invalid user ID:', userData.id);
+                        }
+                    }
+                } else {
+                    console.error('Failed to fetch user ID');
+                }
+            } catch (error) {
+                console.error('Error fetching user ID:', error);
+            }
+        }
+        fetchUserId();
+    }, []);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setCardDetails(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleReserveButtonClick = async () => {
+        try {
+            if (!isCardValid) {
+                console.error('Please enter valid card details.');
+                return;
+            }
+            for (const selectedRoom of selectedRooms) {
+                await reserveRoom(selectedRoom.room.id);
+            }
+            window.location.href = '/staydetails';
+        } catch (error) {
+            console.error('Error during reservation:', error);
+        }
+    };
+
+    const reserveRoom = async (roomId: number) => {
+        try {
+            if (!checkIn || !checkOut || !loggedInUserId) {
+                return;
+            }
+
+            const reservationDto = {
+                checkIn: checkIn.toISOString(),
+                checkOut: checkOut.toISOString(),
+                roomId: roomId,
+                userId: loggedInUserId
+            };
+
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reservationDto),
+            });
+
+            if (!response.ok) {
+                console.error(`Failed to reserve room ${roomId}:`, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error during reservation:', error);
+        }
+    };
 
     const getRoomImage = (room: RoomDto) => {
         if (room.beds === 'Double Twin') {
@@ -24,53 +109,29 @@ export default function Reservation() {
     };
 
     const calculateTotalPrice = (selectedRoom: { room: RoomDto, quantity: number }) => {
-        // Calculate the number of nights
-        const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+        const oneDay = 24 * 60 * 60 * 1000;
         const numberOfNights = Math.round(Math.abs((checkOut.getTime() - checkIn.getTime()) / oneDay));
-
-        // Calculate total price based on price per night and quantity of rooms
         const totalPrice = selectedRoom.room.price * numberOfNights * selectedRoom.quantity;
-
         return { totalPrice, numberOfNights };
-    };
-
-    const reserveRoom = async () => {
-        try {
-            // Make a POST request to your API endpoint with reservation data
-            const response = await fetch('/api/reservations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    CheckIn: checkIn,
-                    CheckOut: checkOut,
-                    // You might need to adjust this part based on how you retrieve RoomId and UserId
-                    RoomId: selectedRooms[0].room.id, // Assuming there's only one room selected
-                    UserId: 1 // Replace with the actual user ID
-                })
-            });
-            // Handle response
-            if (response.ok) {
-                // Reservation successful, maybe show a success message or navigate to another page
-                console.log('Reservation successful');
-                // Navigate to Stay Details page
-                window.location.href = '/staydetails';
-            } else {
-                // Reservation failed, handle error
-                console.error('Reservation failed');
-            }
-        } catch (error) {
-            // Handle error if needed
-            console.error('Error during reservation:', error);
-        }
     };
 
     const totalPriceObject = selectedRooms.map(selectedRoom => calculateTotalPrice(selectedRoom));
     const total = totalPriceObject.reduce((acc, curr) => acc + curr.totalPrice, 0);
 
+    const validateCardDetails = () => {
+        // Card number should have 16 digits, CVV should have 3 digits, and expiry date should be in MM/YYYY format
+        const isCardNumberValid = /^\d{16}$/.test(cardDetails.cardNumber.trim());
+        const isCVVValid = /^\d{3}$/.test(cardDetails.cvv.trim());
+        const isExpiryDateValid = /^(0[1-9]|1[0-2])\/\d{4}$/.test(cardDetails.expiryDate.trim());
+        setIsCardValid(isCardNumberValid && isCVVValid && isExpiryDateValid);
+    };
+
+    useEffect(() => {
+        validateCardDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cardDetails]);
+
     return (
-        
         <Container>
             <link
                 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -79,7 +140,7 @@ export default function Reservation() {
                 crossOrigin="anonymous"
             ></link>
             <div className="navbar">
-                <Navbar/>
+                <Navbar />
             </div>
             <h1>Reservation Details</h1>
             <Row>
@@ -98,7 +159,7 @@ export default function Reservation() {
                                                 <Card.Body>
                                                     <Card.Title>{selectedRoom.room.beds}</Card.Title>
                                                     <Card.Text>
-                                                        Floor: {selectedRoom.room.floorNumber}<br />
+                                                        Room: {selectedRoom.room.roomNumber}<br />
                                                         Check-in Date: {checkIn.toLocaleDateString()}<br />
                                                         Check-out Date: {checkOut.toLocaleDateString()}<br />
                                                         Nights: {numberOfNights}<br />
@@ -119,10 +180,23 @@ export default function Reservation() {
                             <Card.Title>Total Price</Card.Title>
                             <Card.Text>
                                 <h3>${total}</h3>
-                                <Button variant="primary" onClick={reserveRoom}>
+                                <Form>
+                                    <Form.Group controlId="cardNumber">
+                                        <Form.Label>Card Number</Form.Label>
+                                        <Form.Control type="text" name="cardNumber" value={cardDetails.cardNumber} onChange={handleInputChange} placeholder="Enter 16-digit card number" />
+                                    </Form.Group>
+                                    <Form.Group controlId="expiryDate">
+                                        <Form.Label>Expiration Date (MM/YYYY)</Form.Label>
+                                        <Form.Control type="text" name="expiryDate" value={cardDetails.expiryDate} onChange={handleInputChange} placeholder="MM/YYYY" />
+                                    </Form.Group>
+                                    <Form.Group controlId="cvv">
+                                        <Form.Label>CVV</Form.Label>
+                                        <Form.Control type="text" name="cvv" value={cardDetails.cvv} onChange={handleInputChange} placeholder="Enter 3-digit CVV" />
+                                    </Form.Group>
+                                </Form>
+                                <Button variant="primary" onClick={handleReserveButtonClick} disabled={!isCardValid}>
                                     Reserve Room
                                 </Button>
-                                
                             </Card.Text>
                         </Card.Body>
                     </Card>
@@ -131,3 +205,5 @@ export default function Reservation() {
         </Container>
     );
 }
+
+export default Reservation;

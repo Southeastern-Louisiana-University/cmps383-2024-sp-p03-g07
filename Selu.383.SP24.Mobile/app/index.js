@@ -32,7 +32,6 @@ const HomeScreen = () => {
                 iconName = 'food', size = 30, color = '#fcd34d';
             }
 
-            // You can return any component here that you want to use as the icon
             return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         })}

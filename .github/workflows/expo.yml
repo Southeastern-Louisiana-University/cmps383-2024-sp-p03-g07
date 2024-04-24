@@ -30,7 +30,7 @@ jobs:
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-          projectId: Selu383.SP24.Mobile
+          project: Selu383.SP24.Mobile
           packager: npm
 
       - name: 📦 Install dependencies
